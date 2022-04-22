@@ -1,4 +1,4 @@
-![test](resources/title_image.png)
+![Progress Tracker](resources/title_image.png)
 
 A simple program for tracking and organizing tasks.
 
