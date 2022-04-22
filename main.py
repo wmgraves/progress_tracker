@@ -7,14 +7,23 @@
 
 import dearpygui.dearpygui as dpg
 
+# Initialize variables
+
+
 # Create primary window
 dpg.create_context()
+with dpg.window(tag='Primary Window') as window:
+    
+    # Create main menu
+    with dpg.group() as main_menu:
+        dpg.add_text('Title Image Placeholder')
 
-with dpg.window(tag='Primary Window'):
-    dpg.add_text('Test text')
+#     # Create background
+#     with dpg.group(label='Background') as backgroundGroup:
+#         dpg.add_button(label='test button')
 
 # Finish preparing the window
-dpg.create_viewport(title='Project Tracker')
+dpg.create_viewport(title='Project Tracker', width=600, height=800)
 dpg.setup_dearpygui()
 dpg.show_viewport()
 dpg.set_primary_window('Primary Window', True)
