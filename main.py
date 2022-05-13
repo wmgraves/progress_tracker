@@ -5,58 +5,111 @@
 # Description:
 # TODO: add description of this file
 
-import dearpygui.dearpygui as dpg
+import wx
 
-# Helper function for centering elements horizontally
-def centerXPos(frameWidth, elementWidth):
-    return frameWidth / 2 - elementWidth / 2
+defaultStatusText = 'Welcome to progress Tracker! (NOTE: This app is still in development. Visit https://github.com/wmgraves for more information.) '
 
-# Initialize variables
-viewportWidth = 620
-viewportHeight = 850
-
-mainMenuWidth = 600
-mainMenuHeight = 800
-mainMenuButtonWidth = 450
-mainMenuElementSpacing = 50
-mainMenuButtonHeight = 30
-
-# Prepare images
-dpg.create_context()
-logoW, logoH, unused, logoData = dpg.load_image('resources/title_image.png')
-
-with dpg.texture_registry():
-    dpg.add_static_texture(logoW, logoH, logoData, tag = 'logo')
-
-# Create main menu
-with dpg.window(tag = 'Main Menu', width = mainMenuWidth, height = mainMenuHeight, no_resize = True, no_move = True,
-                no_title_bar = True, no_collapse = True, no_close = True, no_saved_settings = True) as window:
-    # Add logo
-    dpg.add_image('logo', pos = (centerXPos(mainMenuWidth, logoW), mainMenuElementSpacing))
+class MainMenuFrame(wx.Frame):
+    """
+    The frame used for the app's main menu.
+    """
     
-    # Add menu options
-    with dpg.group(width = mainMenuButtonWidth,
-                   pos = (centerXPos(mainMenuWidth, mainMenuButtonWidth), 2 * mainMenuElementSpacing + logoH)):
-        # Display all existing projects that can be loaded
-        with dpg.child_window(menubar = True, height = 400):
-            with dpg.menu_bar():
-                with dpg.menu(label = 'Load an existing project:'):
-                    pass
-            
-            # Iterate over all saved projects
-            # TODO: Implement project loading feature
-            dpg.add_text('Update this part of the GUI once project data can be saved/loaded')
+    def __init__(self, parent, title):
+        """
+        Creates the frame.
         
-        # Display other buttons
-        dpg.add_button(label = 'Create New Project', height = mainMenuButtonHeight)
-        dpg.add_button(label = 'Close Program', height = mainMenuButtonHeight)
+        :param parent:
+        :param title:
+        """
+        
+        # Prepare frame
+        super(MainMenuFrame, self).__init__(parent, title=title, size=(550, 600))
+        panel = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        vbox.AddSpacer(20)
 
-# Finish preparing the window
-dpg.create_viewport(title = 'Project Tracker', width = viewportWidth, height = viewportHeight)
-dpg.setup_dearpygui()
-dpg.show_viewport()
-# dpg.set_primary_window('Primary Window', True)
+        # Add the logo
+        logo = wx.Image('resources/title_image.png', wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+        self.logoImage = wx.StaticBitmap(panel, -1, logo)
+        vbox.Add(self.logoImage, 0, wx.ALIGN_CENTER)
+        
+        # Add create project button
+        vbox.AddSpacer(80)
+        self.createButton = wx.Button(panel, -1, 'Create Project')
+        font = self.createButton.GetFont()
+        font.PointSize = 25
+        font.Weight = wx.BOLD
+        self.createButton.SetFont(font)
+        
+        vbox.Add(self.createButton, 0, wx.ALIGN_CENTER)
+        self.createButton.Bind(wx.EVT_BUTTON, self.onCreateClicked)
+        # self.createButton.Bind(wx.EVT_MOUSE_EVENTS, self.onCreateMouseEvents)
+        
+        # Add load project button
+        vbox.AddSpacer(20)
+        self.loadButton = wx.Button(panel, -1, 'Load Project')
+        self.loadButton.SetFont(font)
+        
+        vbox.Add(self.loadButton, 0, wx.ALIGN_CENTER)
+        self.loadButton.Bind(wx.EVT_BUTTON, self.onLoadClicked)
+        # self.loadButton.Bind(wx.EVT_MOUSE_EVENTS, self.onLoadMouseEvents)
+        
+        # Display frame
+        panel.SetSizer(vbox)
+        self.Center()
+        self.Show()
+        self.Fit()
+        
+        # Add status bar
+        self.CreateStatusBar()
+        self.SetStatusText(defaultStatusText)
+    
+    def onCreateMouseEvents(self, event):
+        """
+        description
+        
+        :param event:
+        :return:
+        """
+        
+        if event.Entering():
+            self.SetStatusText('Opens the dialog for creating a new project.')
+        elif event.Leaving():
+            self.SetStatusText(defaultStatusText)
+    
+    def onCreateClicked(self, event):
+        """
+        description
+        
+        :param event:
+        :return:
+        """
+        
+        print('Create Project button clicked')
 
-# Start the window
-dpg.start_dearpygui()
-dpg.destroy_context()
+    def onLoadMouseEvents(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+    
+        if event.Entering():
+            self.SetStatusText('Displays a list of existing projects that can be loaded.')
+        elif event.Leaving():
+            self.SetStatusText(defaultStatusText)
+    
+    def onLoadClicked(self, event):
+        """
+        description
+        
+        :param event:
+        :return:
+        """
+        
+        print('Load Project button clicked')
+
+app = wx.App()
+MainMenuFrame(None, title='Progress Tracker')
+app.MainLoop()

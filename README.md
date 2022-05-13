@@ -9,7 +9,7 @@ After mostly programming using Java and MATLAB for years, I am working to famili
 
 # Requirements
 Here is what you need to be able to run this program:
-* [Dear PyGui](https://github.com/hoffstadt/DearPyGui) (1.5.1+)
+* [wxPython](https://wxpython.org/) (4.1.1)
 
 # Roadmap
 - [ ] UI
