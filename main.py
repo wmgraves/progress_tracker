@@ -3,16 +3,15 @@
 # Created on: 4/21/22
 
 # Description:
-# TODO: add description of this file
+# Starts the app.
 
 # Import external libraries
 import wx
 
 # Import custom modules
-from start_frame import *
-from create_frame import *
+import start_frame
 
 # Create and start app
 app = wx.App()
-StartFrame(None, title='Progress Tracker')
+start_frame.StartFrame(None, title='Progress Tracker')
 app.MainLoop()

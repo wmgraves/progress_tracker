@@ -3,12 +3,13 @@
 # Created on: 05/15/2022
 
 # Description:
-# TODO: add description of this file
+# Handles the main menu.
 
 # Import external libraries
 import wx
 
-defaultStatusText = 'This app is still in development. Visit https://github.com/wmgraves/progress_tracker for more information.'
+# Import custom modules
+import create_frame
 
 class StartFrame(wx.Frame):
     """
@@ -44,7 +45,6 @@ class StartFrame(wx.Frame):
         
         vbox.Add(self.createButton, 0, wx.ALIGN_CENTER)
         self.createButton.Bind(wx.EVT_BUTTON, self.onCreateClicked)
-        # self.createButton.Bind(wx.EVT_MOUSE_EVENTS, self.onCreateMouseEvents)
         
         # Add load project button
         vbox.AddSpacer(20)
@@ -53,7 +53,6 @@ class StartFrame(wx.Frame):
         
         vbox.Add(self.loadButton, 0, wx.ALIGN_CENTER)
         self.loadButton.Bind(wx.EVT_BUTTON, self.onLoadClicked)
-        # self.loadButton.Bind(wx.EVT_MOUSE_EVENTS, self.onLoadMouseEvents)
         
         # Display frame
         panel.SetSizer(vbox)
@@ -63,20 +62,8 @@ class StartFrame(wx.Frame):
         
         # Add status bar
         self.CreateStatusBar()
-        self.SetStatusText(defaultStatusText)
-    
-    def onCreateMouseEvents(self, event):
-        """
-        description
-
-        :param event:
-        :return:
-        """
-        
-        if event.Entering():
-            self.SetStatusText('Opens the dialog for creating a new project.')
-        elif event.Leaving():
-            self.SetStatusText(defaultStatusText)
+        self.SetStatusText(
+            'This app is still in development. Visit https://github.com/wmgraves/progress_tracker for more information.')
     
     def onCreateClicked(self, event):
         """
@@ -87,19 +74,8 @@ class StartFrame(wx.Frame):
         """
         
         print('Create Project button clicked')
-    
-    def onLoadMouseEvents(self, event):
-        """
-        description
-
-        :param event:
-        :return:
-        """
-        
-        if event.Entering():
-            self.SetStatusText('Displays a list of existing projects that can be loaded.')
-        elif event.Leaving():
-            self.SetStatusText(defaultStatusText)
+        create_frame.CreateFrame(None, title = 'Progress Tracker')
+        self.Close(True)
     
     def onLoadClicked(self, event):
         """
