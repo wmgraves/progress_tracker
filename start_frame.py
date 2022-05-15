@@ -10,13 +10,14 @@ import wx
 
 # Import custom modules
 import create_frame
+import load_frame
 
 class StartFrame(wx.Frame):
     """
     The frame used for the app's main menu.
     """
     
-    def __init__(self, parent, title):
+    def __init__(self, parent, title, statusText):
         """
         Creates the frame.
 
@@ -62,8 +63,8 @@ class StartFrame(wx.Frame):
         
         # Add status bar
         self.CreateStatusBar()
-        self.SetStatusText(
-            'This app is still in development. Visit https://github.com/wmgraves/progress_tracker for more information.')
+        self.SetStatusText(statusText)
+        self.statusText = statusText
     
     def onCreateClicked(self, event):
         """
@@ -74,7 +75,7 @@ class StartFrame(wx.Frame):
         """
         
         print('Create Project button clicked')
-        create_frame.CreateFrame(None, title = 'Progress Tracker')
+        create_frame.CreateFrame(None, title = 'Progress Tracker', statusText = self.statusText)
         self.Close(True)
     
     def onLoadClicked(self, event):
@@ -86,3 +87,5 @@ class StartFrame(wx.Frame):
         """
         
         print('Load Project button clicked')
+        load_frame.LoadFrame(None, title = 'Progress Tracker', statusText = self.statusText)
+        self.Close(True)

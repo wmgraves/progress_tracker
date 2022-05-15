@@ -13,5 +13,7 @@ import start_frame
 
 # Create and start app
 app = wx.App()
-start_frame.StartFrame(None, title='Progress Tracker')
+start_frame.StartFrame(None, title = 'Progress Tracker', statusText = 'This app is still in development. Visit '
+                                                                      'https://github.com/wmgraves/progress_tracker '
+                                                                      'for more information')
 app.MainLoop()
