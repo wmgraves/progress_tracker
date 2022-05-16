@@ -11,11 +11,14 @@ import wx
 # Import custom modules
 import create_frame
 import load_frame
+import settings_frame
+
 
 class StartFrame(wx.Frame):
     """
     The frame used for the app's main menu.
     """
+    
     
     def __init__(self, parent, title, statusText):
         """
@@ -26,7 +29,7 @@ class StartFrame(wx.Frame):
         """
         
         # Prepare frame
-        super(StartFrame, self).__init__(parent, title = title, size = (550, 500))
+        super(StartFrame, self).__init__(parent, title = title, size = (550, 550))
         panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.AddSpacer(20)
@@ -55,6 +58,14 @@ class StartFrame(wx.Frame):
         vbox.Add(self.loadButton, 0, wx.ALIGN_CENTER)
         self.loadButton.Bind(wx.EVT_BUTTON, self.onLoadClicked)
         
+        # Add settings button (true delete, data file location, other stuff)
+        vbox.AddSpacer(20)
+        self.settingsButton = wx.Button(panel, -1, 'Settings')
+        self.settingsButton.SetFont(font)
+        
+        vbox.Add(self.settingsButton, 0, wx.ALIGN_CENTER)
+        self.settingsButton.Bind(wx.EVT_BUTTON, self.onSettingsClicked)
+        
         # Display frame
         panel.SetSizer(vbox)
         self.Center()
@@ -65,6 +76,7 @@ class StartFrame(wx.Frame):
         self.CreateStatusBar()
         self.SetStatusText(statusText)
         self.statusText = statusText
+    
     
     def onCreateClicked(self, event):
         """
@@ -77,6 +89,20 @@ class StartFrame(wx.Frame):
         print('Create Project button clicked')
         create_frame.CreateFrame(None, title = 'Progress Tracker', statusText = self.statusText)
         self.Close(True)
+    
+    
+    def onSettingsClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+        
+        print('Settings button clicked')
+        settings_frame.SettingsFrame(None, title = 'Progress Tracker', statusText = self.statusText)
+        self.Close(True)
+    
     
     def onLoadClicked(self, event):
         """

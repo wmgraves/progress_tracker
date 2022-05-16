@@ -11,6 +11,7 @@ import wx
 # Import custom modules
 import start_frame
 
+
 # Create and start app
 app = wx.App()
 start_frame.StartFrame(None, title = 'Progress Tracker', statusText = 'This app is still in development. Visit '

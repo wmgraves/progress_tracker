@@ -12,16 +12,18 @@ import wx
 import start_frame
 import overview_frame
 
+
 # Initialize variables
 topPadding = 10
 sidePadding = 5
 vGap = 20
-hGap = 15
+hGap = 10
 
 class CreateFrame(wx.Frame):
     """
     Allows the user to enter information for creating a new project.
     """
+    
     
     def __init__(self, parent, title, statusText):
         """
@@ -39,7 +41,7 @@ class CreateFrame(wx.Frame):
         vbox.AddSpacer(topPadding)
         
         # Add prompts for project title
-        self.titleLabel = wx.StaticText(panel, label = 'Project Title:')
+        self.titleLabel = wx.StaticText(panel, label = 'Project Title:*')
         labelFont = self.titleLabel.GetFont()
         labelFont.PointSize = 15
         labelFont.Weight = wx.BOLD
@@ -60,7 +62,7 @@ class CreateFrame(wx.Frame):
         vbox.AddSpacer(vGap)
         
         # Add prompts for project description
-        self.descriptionLabel = wx.StaticText(panel, label = 'Description:')
+        self.descriptionLabel = wx.StaticText(panel, label = 'Description:*')
         self.descriptionLabel.SetFont(labelFont)
         self.descriptionText = wx.TextCtrl(panel, size = (-1, 150), style = wx.TE_MULTILINE)
         self.descriptionText.SetFont(textFont)
@@ -102,6 +104,7 @@ class CreateFrame(wx.Frame):
         self.SetStatusText(statusText)
         self.statusText = statusText
     
+    
     def onCreateClicked(self, event):
         """
         description
@@ -111,8 +114,9 @@ class CreateFrame(wx.Frame):
         """
         
         print('Create button clicked')
-        overview_frame.OverviewFrame(None, title = 'ProgressTracker', statusText = self.statusText)
+        overview_frame.OverviewFrame(None, title = 'Progress Tracker', statusText = self.statusText)
         self.Close(True)
+    
     
     def onCancelClicked(self, event):
         """

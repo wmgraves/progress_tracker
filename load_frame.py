@@ -12,16 +12,18 @@ import wx
 import start_frame
 import overview_frame
 
+
 # Initialize variables
 topPadding = 10
 sidePadding = 5
 vGap = 20
-hGap = 15
+hGap = 10
 
 class LoadFrame(wx.Frame):
     """
     Allows the user to select an existing project to load and edit.
     """
+    
     
     def __init__(self, parent, title, statusText):
         """
@@ -97,6 +99,7 @@ class LoadFrame(wx.Frame):
         self.SetStatusText(statusText)
         self.statusText = statusText
     
+    
     def onLoadClicked(self, event):
         """
         description
@@ -107,8 +110,9 @@ class LoadFrame(wx.Frame):
         
         print('Load button clicked')
         print('Element ' + str(self.projectList.GetSelection()) + ' was selected')
-        overview_frame.OverviewFrame(None, title = 'ProgressTracker', statusText = self.statusText)
+        overview_frame.OverviewFrame(None, title = 'Progress Tracker', statusText = self.statusText)
         self.Close(True)
+    
     
     def onCancelClicked(self, event):
         """
