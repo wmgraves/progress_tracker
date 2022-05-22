@@ -13,10 +13,10 @@ Here is what you need to be able to run this program:
 
 # Roadmap
 - [ ] UI
-  - [ ] Theme
-  - [ ] Main Menu
+  - [X] Main Menu
+  - [X] Create Project
   - [ ] Project Overview
   - [ ] Create/Edit Task
-- [ ] Saving
-- [ ] Settings
+- [ ] Loading/Saving Project Data
+- [X] Settings
 - [ ] Export Options
