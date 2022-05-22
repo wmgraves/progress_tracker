@@ -5,7 +5,7 @@
 # Description:
 # Handles the main menu.
 
-# Import external libraries
+# Import external modules
 import json
 import wx
 

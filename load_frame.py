@@ -5,7 +5,7 @@
 # Description:
 # Handles loading an existing project.
 
-# Import external libraries
+# Import external modules
 import wx
 
 # Import custom modules
@@ -108,7 +108,10 @@ class LoadFrame(wx.Frame):
 
         print('Load button clicked')
         print('Element ' + str(self.projectList.GetSelection()) + ' was selected')
-        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText)
+
+        # TODO: implement this
+
+        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText, fileName='')
         self.Close(True)
 
     def onCancelClicked(self, event):

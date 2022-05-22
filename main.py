@@ -5,7 +5,7 @@
 # Description:
 # Starts the app.
 
-# Import external libraries
+# Import external modules
 import json
 import os
 import wx
@@ -19,14 +19,11 @@ if not (os.path.isfile(filePath) and os.access(filePath, os.R_OK)):
     print(filePath + ' does not exist, creating file now...')
 
     defaultData = {
-        'projects': {
-            'test': False
-        }
+        'projects': {}
     }
 
     with open(filePath, 'w') as settingsFile:
-        settingsFile.write(json.dumps(defaultData))
-
+        settingsFile.write(json.dumps(defaultData, indent=4))
     settingsFile.close()
 
 # Create and start the app

@@ -5,7 +5,7 @@
 # Description:
 # Handles modifying general app settings.
 
-# Import external libraries
+# Import external modules
 import wx
 
 # Import custom modules

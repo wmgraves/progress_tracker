@@ -5,7 +5,7 @@
 # Description:
 # TODO: add description of this file
 
-# Import external libraries
+# Import external modules
 import wx
 
 # Import custom modules
@@ -23,7 +23,7 @@ class OverviewFrame(wx.Frame):
     Displays an overview of a project's data.
     """
 
-    def __init__(self, parent, title, statusText):
+    def __init__(self, parent, title, statusText, fileName):
         """
         Creates the frame.
 
@@ -235,6 +235,6 @@ class OverviewFrame(wx.Frame):
         :return:
         """
 
-        print('Exit to Main menu button clicked')
+        print('Exit to Main Menu button clicked')
         start_frame.StartFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)
