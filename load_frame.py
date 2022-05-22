@@ -12,19 +12,18 @@ import wx
 import start_frame
 import overview_frame
 
-
 # Initialize variables
 topPadding = 10
 sidePadding = 5
 vGap = 20
 hGap = 10
 
+
 class LoadFrame(wx.Frame):
     """
     Allows the user to select an existing project to load and edit.
     """
-    
-    
+
     def __init__(self, parent, title, statusText):
         """
         Creates the frame.
@@ -32,54 +31,54 @@ class LoadFrame(wx.Frame):
         :param parent:
         :param title:
         """
-        
+
         # Prepare frame
-        super(LoadFrame, self).__init__(parent, title = title, size = (550, 650))
+        super(LoadFrame, self).__init__(parent, title=title, size=(550, 650))
         panel = wx.Panel(self)
-        
+
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.AddSpacer(topPadding)
-        
+
         # Add label
-        self.instructionLabel = wx.StaticText(panel, label = 'Select a project from the list below.')
+        self.instructionLabel = wx.StaticText(panel, label='Select a project from the list below.')
         labelFont = self.instructionLabel.GetFont()
         labelFont.PointSize = 15
         labelFont.Weight = wx.BOLD
         self.instructionLabel.SetFont(labelFont)
-        
+
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(self.instructionLabel, 0, wx.ALIGN_LEFT)
         hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0)
         vbox.AddSpacer(vGap)
-        
+
         # Add list of existing projects
         projectList = []
         for i in range(50):
             projectList.append('Project ' + str(i))
-        
-        self.projectList = wx.ListBox(panel, 0, style = wx.LB_SINGLE, choices = projectList)
+
+        self.projectList = wx.ListBox(panel, 0, style=wx.LB_SINGLE, choices=projectList)
         textFont = self.projectList.GetFont()
         textFont.PointSize = 13
         self.projectList.SetFont(textFont)
-        
+
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(self.projectList, 1)
         hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
-        
+
         # Add buttons
-        self.loadButton = wx.Button(panel, label = 'Load')
+        self.loadButton = wx.Button(panel, label='Load')
         self.loadButton.SetFont(labelFont)
         self.loadButton.Bind(wx.EVT_BUTTON, self.onLoadClicked)
-        
-        self.cancelButton = wx.Button(panel, label = 'Cancel')
+
+        self.cancelButton = wx.Button(panel, label='Cancel')
         self.cancelButton.SetFont(labelFont)
         self.cancelButton.Bind(wx.EVT_BUTTON, self.onCancelClicked)
-        
+
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(self.loadButton, 0)
@@ -87,19 +86,18 @@ class LoadFrame(wx.Frame):
         hbox.Add(self.cancelButton, 0)
         hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0, wx.ALIGN_RIGHT)
-        
+
         # Display frame
         panel.SetSizer(vbox)
         self.Center()
         self.Show()
         self.Fit()
-        
+
         # Add status bar
         self.CreateStatusBar()
         self.SetStatusText(statusText)
         self.statusText = statusText
-    
-    
+
     def onLoadClicked(self, event):
         """
         description
@@ -107,13 +105,12 @@ class LoadFrame(wx.Frame):
         :param event:
         :return:
         """
-        
+
         print('Load button clicked')
         print('Element ' + str(self.projectList.GetSelection()) + ' was selected')
-        overview_frame.OverviewFrame(None, title = 'Progress Tracker', statusText = self.statusText)
+        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)
-    
-    
+
     def onCancelClicked(self, event):
         """
         description
@@ -121,7 +118,7 @@ class LoadFrame(wx.Frame):
         :param event:
         :return:
         """
-        
+
         print('Cancel button clicked')
-        start_frame.StartFrame(None, title = 'Progress Tracker', statusText = self.statusText)
+        start_frame.StartFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)

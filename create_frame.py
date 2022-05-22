@@ -6,12 +6,12 @@
 # Handles creating new projects.
 
 # Import external libraries
+import json
 import wx
 
 # Import custom modules
 import start_frame
 import overview_frame
-
 
 # Initialize variables
 topPadding = 10
@@ -19,12 +19,12 @@ sidePadding = 5
 vGap = 20
 hGap = 10
 
+
 class CreateFrame(wx.Frame):
     """
     Allows the user to enter information for creating a new project.
     """
-    
-    
+
     def __init__(self, parent, title, statusText):
         """
         Creates the frame.
@@ -32,26 +32,26 @@ class CreateFrame(wx.Frame):
         :param parent:
         :param title:
         """
-        
+
         # Prepare frame
-        super(CreateFrame, self).__init__(parent, title = title, size = (550, 650))
+        super(CreateFrame, self).__init__(parent, title=title, size=(550, 650))
         panel = wx.Panel(self)
-        
+
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.AddSpacer(topPadding)
-        
+
         # Add prompts for project title
-        self.titleLabel = wx.StaticText(panel, label = 'Project Title:*')
+        self.titleLabel = wx.StaticText(panel, label='Project Title:*')
         labelFont = self.titleLabel.GetFont()
         labelFont.PointSize = 15
         labelFont.Weight = wx.BOLD
         self.titleLabel.SetFont(labelFont)
-        
+
         self.titleText = wx.TextCtrl(panel)
         textFont = self.titleText.GetFont()
         textFont.PointSize = 13
         self.titleText.SetFont(textFont)
-        
+
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(self.titleLabel, 0)
@@ -60,13 +60,13 @@ class CreateFrame(wx.Frame):
         hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
-        
+
         # Add prompts for project description
-        self.descriptionLabel = wx.StaticText(panel, label = 'Description:*')
+        self.descriptionLabel = wx.StaticText(panel, label='Description:*')
         self.descriptionLabel.SetFont(labelFont)
-        self.descriptionText = wx.TextCtrl(panel, size = (-1, 150), style = wx.TE_MULTILINE)
+        self.descriptionText = wx.TextCtrl(panel, size=(-1, 150), style=wx.TE_MULTILINE)
         self.descriptionText.SetFont(textFont)
-        
+
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(self.descriptionLabel, 0)
@@ -75,16 +75,16 @@ class CreateFrame(wx.Frame):
         hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
-        
+
         # Add buttons
-        self.createButton = wx.Button(panel, label = 'Create')
+        self.createButton = wx.Button(panel, label='Create')
         self.createButton.SetFont(labelFont)
         self.createButton.Bind(wx.EVT_BUTTON, self.onCreateClicked)
-        
-        self.cancelButton = wx.Button(panel, label = 'Cancel')
+
+        self.cancelButton = wx.Button(panel, label='Cancel')
         self.cancelButton.SetFont(labelFont)
         self.cancelButton.Bind(wx.EVT_BUTTON, self.onCancelClicked)
-        
+
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(self.createButton, 0)
@@ -92,19 +92,18 @@ class CreateFrame(wx.Frame):
         hbox.Add(self.cancelButton, 0)
         hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0, wx.ALIGN_RIGHT)
-        
+
         # Display frame
         panel.SetSizer(vbox)
         self.Center()
         self.Show()
         self.Fit()
-        
+
         # Add status bar
         self.CreateStatusBar()
         self.SetStatusText(statusText)
         self.statusText = statusText
-    
-    
+
     def onCreateClicked(self, event):
         """
         description
@@ -112,12 +111,11 @@ class CreateFrame(wx.Frame):
         :param event:
         :return:
         """
-        
+
         print('Create button clicked')
-        overview_frame.OverviewFrame(None, title = 'Progress Tracker', statusText = self.statusText)
+        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)
-    
-    
+
     def onCancelClicked(self, event):
         """
         description
@@ -125,7 +123,7 @@ class CreateFrame(wx.Frame):
         :param event:
         :return:
         """
-        
+
         print('Cancel button clicked')
-        start_frame.StartFrame(None, title = 'Progress Tracker', statusText = self.statusText)
+        start_frame.StartFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)
