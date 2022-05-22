@@ -6,6 +6,8 @@
 # Handles the main menu.
 
 # Import external libraries
+import json
+import os
 import wx
 
 # Import custom modules
@@ -57,6 +59,28 @@ class StartFrame(wx.Frame):
         
         vbox.Add(self.loadButton, 0, wx.ALIGN_CENTER)
         self.loadButton.Bind(wx.EVT_BUTTON, self.onLoadClicked)
+        
+        # Check whether the load button should be disabled
+        filePath = 'data/settings.json'
+        with open(filePath, 'r') as settingsFile:
+            settings = json.load(settingsFile)
+            
+            # Handle when there are no projects
+            if len(settings['projects']) < 1:
+                self.loadButton.Enable(False)
+            
+            # Handle when there are no visible projects
+            else:
+                visibleProjects = False
+                for value in settings['projects'].values():
+                    if value:
+                        visibleProjects = True
+                        break
+                
+                if not visibleProjects:
+                    self.loadButton.Enable(False)
+        
+        settingsFile.close()
         
         # Add settings button (true delete, data file location, other stuff)
         vbox.AddSpacer(20)
