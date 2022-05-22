@@ -5,8 +5,9 @@
 # Description:
 # Handles creating new projects.
 
-# Import external libraries
+# Import external modules
 import json
+import os
 import wx
 
 # Import custom modules
@@ -113,7 +114,43 @@ class CreateFrame(wx.Frame):
         """
 
         print('Create button clicked')
-        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText)
+
+        # Validate all information
+        # TODO: add validation stuff
+
+        # Create new project file
+        fileStart = 'data/project_'
+        fileEnd = '.json'
+        projectNum = 1
+        while True:
+            if not os.path.isfile(fileStart + str(projectNum) + fileEnd):
+                break
+
+            projectNum += 1
+
+        projectData = {
+            'title': 'Default Title',
+            'imageFilepath': '',
+            'description': 'Default Description',
+            'tasks': {}
+        }
+
+        fileName = fileStart + str(projectNum) + fileEnd
+        with open(fileName, 'w') as projectFile:
+            projectFile.write(json.dumps(projectData, indent=4))
+        projectFile.close()
+        print('Created new project data file (' + fileName + ')')
+
+        # Add project file to the settings file
+        with open('data/settings.json', 'r+') as settingsFile:
+            settingsData = json.load(settingsFile)
+            settingsData['projects'][fileName] = True
+            settingsFile.seek(0)
+            settingsFile.write(json.dumps(settingsData, indent=4))
+            settingsFile.truncate()
+        settingsFile.close()
+
+        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText, fileName=fileName)
         self.Close(True)
 
     def onCancelClicked(self, event):
