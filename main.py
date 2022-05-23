@@ -8,10 +8,14 @@
 # Import external modules
 import json
 import os
+from pathlib import Path
 import wx
 
 # Import custom modules
 import start_frame
+
+# Create a data directory if it does not already exist
+Path('data').mkdir(parents=True, exist_ok=True)
 
 # Create a config file if it does not already exist
 filePath = 'data/settings.json'
