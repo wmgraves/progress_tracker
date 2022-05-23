@@ -132,7 +132,7 @@ class LoadFrame(wx.Frame):
         print('Element ' + str(selectionNum) + ' was selected')
 
         overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
-                      fileName=list(self.projects.keys())[selectionNum])
+                                     fileName=list(self.projects.keys())[selectionNum])
         self.Close(True)
 
     def onCancelClicked(self, event):

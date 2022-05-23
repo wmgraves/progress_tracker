@@ -33,6 +33,6 @@ if not (os.path.isfile(filePath) and os.access(filePath, os.R_OK)):
 # Create and start the app
 app = wx.App()
 start_frame.StartFrame(None, title='Progress Tracker', statusText='This app is still in development. Visit '
-                                                      'https://github.com/wmgraves/progress_tracker for more '
-                                                      'information')
+                                                                  'https://github.com/wmgraves/progress_tracker for more '
+                                                                  'information')
 app.MainLoop()

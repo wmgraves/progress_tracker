@@ -139,7 +139,9 @@ class CreateFrame(wx.Frame):
                 1: 'Add new categories by using the buttons below'
             },
             'tasks': {
-                1: 'Add new tasks by using the buttons below'
+                1: {
+                    'title': 'Add new tasks by using the buttons below'
+                }
             }
         }
 
