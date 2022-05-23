@@ -135,7 +135,12 @@ class CreateFrame(wx.Frame):
             'imageFilepath': '',
             'description': self.descriptionText.GetValue(),
             'lastModified': str(datetime.now()),
-            'tasks': {}
+            'categories': {
+                1: 'Add new categories by using the buttons below'
+            },
+            'tasks': {
+                1: 'Add new tasks by using the buttons below'
+            }
         }
 
         fileName = fileStart + str(projectNum) + fileEnd
