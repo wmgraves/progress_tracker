@@ -6,6 +6,7 @@
 # Handles loading an existing project.
 
 # Import external modules
+import json
 import wx
 
 # Import custom modules
@@ -54,11 +55,27 @@ class LoadFrame(wx.Frame):
         vbox.AddSpacer(vGap)
 
         # Add list of existing projects
-        projectList = []
-        for i in range(50):
-            projectList.append('Project ' + str(i))
+        self.projects = {}
+        filePath = 'data/settings.json'
 
-        self.projectList = wx.ListBox(panel, 0, style=wx.LB_SINGLE, choices=projectList)
+        with open(filePath, 'r') as settingsFile:
+            settings = json.load(settingsFile)
+
+            # iterate over all projects
+            for fileName, visible in settings['projects'].items():
+                # Check whether the project should be shown
+                if not visible:
+                    continue
+
+                # Add the project to the list
+                with open(fileName, 'r') as projectFile:
+                    projectData = json.load(projectFile)
+                    self.projects[fileName] = projectData['title']
+                projectFile.close()
+
+        settingsFile.close()
+
+        self.projectList = wx.ListBox(panel, 0, style=wx.LB_SINGLE, choices=list(self.projects.values()))
         textFont = self.projectList.GetFont()
         textFont.PointSize = 13
         self.projectList.SetFont(textFont)
@@ -107,11 +124,12 @@ class LoadFrame(wx.Frame):
         """
 
         print('Load button clicked')
-        print('Element ' + str(self.projectList.GetSelection()) + ' was selected')
 
-        # TODO: implement this
+        selectionNum = self.projectList.GetSelection()
+        print('Element ' + str(selectionNum) + ' was selected')
 
-        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText, fileName='')
+        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
+                                     fileName=list(self.projects.keys())[selectionNum])
         self.Close(True)
 
     def onCancelClicked(self, event):

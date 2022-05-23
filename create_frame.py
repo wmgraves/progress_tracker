@@ -65,6 +65,7 @@ class CreateFrame(wx.Frame):
         # Add prompts for project description
         self.descriptionLabel = wx.StaticText(panel, label='Description:*')
         self.descriptionLabel.SetFont(labelFont)
+
         self.descriptionText = wx.TextCtrl(panel, size=(-1, 150), style=wx.TE_MULTILINE)
         self.descriptionText.SetFont(textFont)
 
@@ -129,9 +130,9 @@ class CreateFrame(wx.Frame):
             projectNum += 1
 
         projectData = {
-            'title': 'Default Title',
+            'title': self.titleText.GetValue(),
             'imageFilepath': '',
-            'description': 'Default Description',
+            'description': self.descriptionText.GetValue(),
             'tasks': {}
         }
 
