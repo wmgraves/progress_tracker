@@ -126,6 +126,9 @@ class LoadFrame(wx.Frame):
         print('Load button clicked')
 
         selectionNum = self.projectList.GetSelection()
+        if selectionNum == -1:
+            print('No element was selected')
+            return
         print('Element ' + str(selectionNum) + ' was selected')
 
         overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
