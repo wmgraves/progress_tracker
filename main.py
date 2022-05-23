@@ -11,7 +11,7 @@ import os
 import wx
 
 # Import custom modules
-from start_frame import StartFrame
+import start_frame
 
 # Create a config file if it does not already exist
 filePath = 'data/settings.json'
@@ -28,7 +28,7 @@ if not (os.path.isfile(filePath) and os.access(filePath, os.R_OK)):
 
 # Create and start the app
 app = wx.App()
-StartFrame(None, title='Progress Tracker', statusText='This app is still in development. Visit '
+start_frame.StartFrame(None, title='Progress Tracker', statusText='This app is still in development. Visit '
                                                       'https://github.com/wmgraves/progress_tracker for more '
                                                       'information')
 app.MainLoop()

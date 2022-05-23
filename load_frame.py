@@ -10,8 +10,8 @@ import json
 import wx
 
 # Import custom modules
-from start_frame import StartFrame
-from overview_frame import OverviewFrame
+import start_frame
+import overview_frame
 
 # Initialize variables
 topPadding = 10
@@ -128,7 +128,7 @@ class LoadFrame(wx.Frame):
         selectionNum = self.projectList.GetSelection()
         print('Element ' + str(selectionNum) + ' was selected')
 
-        OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
+        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
                       fileName=list(self.projects.keys())[selectionNum])
         self.Close(True)
 
@@ -141,5 +141,5 @@ class LoadFrame(wx.Frame):
         """
 
         print('Cancel button clicked')
-        StartFrame(None, title='Progress Tracker', statusText=self.statusText)
+        start_frame.StartFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)

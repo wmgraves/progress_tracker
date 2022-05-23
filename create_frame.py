@@ -12,8 +12,8 @@ import os
 import wx
 
 # Import custom modules
-from start_frame import StartFrame
-from overview_frame import OverviewFrame
+import start_frame
+import overview_frame
 
 # Initialize variables
 topPadding = 10
@@ -153,7 +153,7 @@ class CreateFrame(wx.Frame):
             settingsFile.truncate()
         settingsFile.close()
 
-        OverviewFrame(None, title='Progress Tracker', statusText=self.statusText, fileName=fileName)
+        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText, fileName=fileName)
         self.Close(True)
 
     def onCancelClicked(self, event):
@@ -165,5 +165,5 @@ class CreateFrame(wx.Frame):
         """
 
         print('Cancel button clicked')
-        StartFrame(None, title='Progress Tracker', statusText=self.statusText)
+        start_frame.StartFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)

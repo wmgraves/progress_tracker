@@ -9,7 +9,7 @@
 import wx
 
 # Import custom modules
-from start_frame import StartFrame
+import start_frame
 
 # Initialize variables
 topPadding = 10

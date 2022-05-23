@@ -10,7 +10,7 @@ from datetime import datetime
 import wx
 
 # Import custom modules
-from start_frame import StartFrame
+import start_frame
 from project import Project
 
 # Initialize variables
@@ -278,6 +278,9 @@ class OverviewFrame(wx.Frame):
 
         # Update project data
         self.project.data['lastModified'] = str(datetime.now())
+        self.project.data['title'] = self.titleText.GetValue()
+        self.project.data['imageFilepath'] = self.imageText.GetValue()
+        self.project.data['description'] = self.descriptionText.GetValue()
 
         self.project.saveData()
         # self.saveButton.Enable(False)
@@ -301,5 +304,5 @@ class OverviewFrame(wx.Frame):
         """
 
         print('Exit to Main Menu button clicked')
-        StartFrame(None, title='Progress Tracker', statusText=self.statusText)
+        start_frame.StartFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)
