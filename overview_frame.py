@@ -57,10 +57,11 @@ class OverviewFrame(wx.Frame):
         # buttonFont.PointSize = 10
         # self.titleSaveButton.SetFont(buttonFont)
 
-        self.titleResetButton = wx.Button(panel, label='Reset')
+        self.titleResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         buttonFont = self.titleResetButton.GetFont()
         buttonFont.PointSize = 10
         self.titleResetButton.SetFont(buttonFont)
+        self.titleResetButton.Bind(wx.EVT_BUTTON, self.onTitleResetClicked)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
@@ -84,8 +85,9 @@ class OverviewFrame(wx.Frame):
         # self.imageSaveButton = wx.Button(panel, label='Save')
         # self.imageSaveButton.SetFont(buttonFont)
 
-        self.imageResetButton = wx.Button(panel, label='Reset')
+        self.imageResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         self.imageResetButton.SetFont(buttonFont)
+        self.imageResetButton.Bind(wx.EVT_BUTTON, self.onImageResetClicked)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
@@ -107,8 +109,9 @@ class OverviewFrame(wx.Frame):
         # self.descriptionSaveButton = wx.Button(panel, label='Save')
         # self.descriptionSaveButton.SetFont(buttonFont)
 
-        self.descriptionResetButton = wx.Button(panel, label='Reset')
+        self.descriptionResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         self.descriptionResetButton.SetFont(buttonFont)
+        self.descriptionResetButton.Bind(wx.EVT_BUTTON, self.onDescriptionResetClicked)
 
         self.descriptionText = wx.TextCtrl(panel, value=self.project.data['description'], size=(-1, 150),
                                            style=wx.TE_MULTILINE)
@@ -164,28 +167,77 @@ class OverviewFrame(wx.Frame):
         vbox.Add(hbox, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
-        # Add task overview stuff
-        self.taskListLabel = wx.StaticText(panel, label='Task List:')
-        self.taskListLabel.SetFont(headingFont)
+        # Add category list
+        self.catListLabel = wx.StaticText(panel, label='Categories:')
+        self.catListLabel.SetFont(headingFont)
 
-        self.taskListCtrl = wx.ListCtrl(panel, style=wx.LB_SINGLE)
-        # TODO figure out how to handle per-line formatting stuff
+        categoryNames = []
+        for i in sorted(self.project.data['categories'].keys()):
+            categoryNames.append(self.project.data['categories'][i])
+        self.catListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=categoryNames)
+
+        self.catListAddButton = wx.Button(panel, label='+', style=wx.BU_EXACTFIT)
+        self.catListAddButton.SetFont(buttonFont)
+
+        self.catListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
+        self.catListRemoveButton.SetFont(buttonFont)
+
+        self.catListUpButton = wx.Button(panel, label='▲', style=wx.BU_EXACTFIT)
+        self.catListUpButton.SetFont(buttonFont)
+
+        self.catListDownButton = wx.Button(panel, label='▼', style=wx.BU_EXACTFIT)
+        self.catListDownButton.SetFont(buttonFont)
+
+        tempButtonHolder = wx.BoxSizer(wx.HORIZONTAL)
+        tempButtonHolder.Add(self.catListAddButton, 0)
+        tempButtonHolder.Add(self.catListRemoveButton, 0)
+        tempButtonHolder.Add(self.catListUpButton, 0)
+        tempButtonHolder.Add(self.catListDownButton, 0)
 
         temp = wx.BoxSizer(wx.VERTICAL)
-        temp.Add(self.taskListLabel, 0, wx.ALIGN_LEFT)
-        temp.Add(self.taskListCtrl, 0, wx.EXPAND)
+        temp.Add(self.catListLabel, 0, wx.ALIGN_LEFT)
+        temp.Add(self.catListCtrl, 0, wx.EXPAND)
+        temp.Add(tempButtonHolder, 0, wx.ALIGN_RIGHT)
+
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(temp, 1, wx.EXPAND)
         hbox.AddSpacer(hGap)
 
-        self.taskDetailsLabel = wx.StaticText(panel, label='Task Details:')
-        self.taskDetailsLabel.SetFont(headingFont)
+        # Add task list
+        self.taskListLabel = wx.StaticText(panel, label='Tasks:')
+        self.taskListLabel.SetFont(headingFont)
 
-        # TODO add task detail stuff here
+        # TODO update when task dictionary is added
+
+        taskNames = []
+        for i in sorted(self.project.data['tasks'].keys()):
+            taskNames.append(self.project.data['tasks'][i]['title'])
+        self.taskListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=taskNames)
+
+        self.taskListAddButton = wx.Button(panel, label='+', style=wx.BU_EXACTFIT)
+        self.taskListAddButton.SetFont(buttonFont)
+
+        self.taskListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
+        self.taskListRemoveButton.SetFont(buttonFont)
+
+        self.taskListUpButton = wx.Button(panel, label='▲', style=wx.BU_EXACTFIT)
+        self.taskListUpButton.SetFont(buttonFont)
+
+        self.taskListDownButton = wx.Button(panel, label='▼', style=wx.BU_EXACTFIT)
+        self.taskListDownButton.SetFont(buttonFont)
+
+        tempButtonHolder = wx.BoxSizer(wx.HORIZONTAL)
+        tempButtonHolder.Add(self.taskListAddButton, 0)
+        tempButtonHolder.Add(self.taskListRemoveButton, 0)
+        tempButtonHolder.Add(self.taskListUpButton, 0)
+        tempButtonHolder.Add(self.taskListDownButton, 0)
 
         temp = wx.BoxSizer(wx.VERTICAL)
-        temp.Add(self.taskDetailsLabel, 0, wx.ALIGN_LEFT)
+        temp.Add(self.taskListLabel, 0, wx.ALIGN_LEFT)
+        temp.Add(self.taskListCtrl, 0, wx.EXPAND)
+        temp.Add(tempButtonHolder, 0, wx.ALIGN_RIGHT)
+
         hbox.Add(temp, 2, wx.EXPAND)
         hbox.AddSpacer(sidePadding)
 
@@ -194,19 +246,19 @@ class OverviewFrame(wx.Frame):
 
         # Add buttons
         self.saveButton = wx.Button(panel, label='Save')
-        endButtonFont = self.saveButton.GetFont()
-        endButtonFont.PointSize = 15
-        endButtonFont.Weight = wx.BOLD
-        self.saveButton.SetFont(endButtonFont)
+        bottomButtonFont = self.saveButton.GetFont()
+        bottomButtonFont.PointSize = 15
+        bottomButtonFont.Weight = wx.BOLD
+        self.saveButton.SetFont(bottomButtonFont)
         self.saveButton.Bind(wx.EVT_BUTTON, self.onSaveClicked)
         # self.saveButton.Enable(False)
 
         self.exportButton = wx.Button(panel, label='Export')
-        self.exportButton.SetFont(endButtonFont)
+        self.exportButton.SetFont(bottomButtonFont)
         self.exportButton.Bind(wx.EVT_BUTTON, self.onExportClicked)
 
         self.exitButton = wx.Button(panel, label='Exit to Main Menu')
-        self.exitButton.SetFont(endButtonFont)
+        self.exitButton.SetFont(bottomButtonFont)
         self.exitButton.Bind(wx.EVT_BUTTON, self.onExitClicked)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
