@@ -6,13 +6,14 @@
 # Handles creating new projects.
 
 # Import external modules
+from datetime import datetime
 import json
 import os
 import wx
 
 # Import custom modules
-import start_frame
-import overview_frame
+from start_frame import StartFrame
+from overview_frame import OverviewFrame
 
 # Initialize variables
 topPadding = 10
@@ -133,6 +134,7 @@ class CreateFrame(wx.Frame):
             'title': self.titleText.GetValue(),
             'imageFilepath': '',
             'description': self.descriptionText.GetValue(),
+            'lastModified': str(datetime.now()),
             'tasks': {}
         }
 
@@ -151,7 +153,7 @@ class CreateFrame(wx.Frame):
             settingsFile.truncate()
         settingsFile.close()
 
-        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText, fileName=fileName)
+        OverviewFrame(None, title='Progress Tracker', statusText=self.statusText, fileName=fileName)
         self.Close(True)
 
     def onCancelClicked(self, event):
@@ -163,5 +165,5 @@ class CreateFrame(wx.Frame):
         """
 
         print('Cancel button clicked')
-        start_frame.StartFrame(None, title='Progress Tracker', statusText=self.statusText)
+        StartFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)

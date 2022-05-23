@@ -10,9 +10,9 @@ import json
 import wx
 
 # Import custom modules
-import create_frame
-import load_frame
-import settings_frame
+from create_frame import CreateFrame
+from load_frame import LoadFrame
+from settings_frame import SettingsFrame
 
 
 class StartFrame(wx.Frame):
@@ -108,7 +108,7 @@ class StartFrame(wx.Frame):
         """
 
         print('Create Project button clicked')
-        create_frame.CreateFrame(None, title='Progress Tracker', statusText=self.statusText)
+        CreateFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)
 
     def onSettingsClicked(self, event):
@@ -120,7 +120,7 @@ class StartFrame(wx.Frame):
         """
 
         print('Settings button clicked')
-        settings_frame.SettingsFrame(None, title='Progress Tracker', statusText=self.statusText)
+        SettingsFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)
 
     def onLoadClicked(self, event):
@@ -132,5 +132,5 @@ class StartFrame(wx.Frame):
         """
 
         print('Load Project button clicked')
-        load_frame.LoadFrame(None, title='Progress Tracker', statusText=self.statusText)
+        LoadFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)

@@ -6,11 +6,12 @@
 # TODO: add description of this file
 
 # Import external modules
+from datetime import datetime
 import wx
 
 # Import custom modules
-import start_frame
-import project
+from start_frame import StartFrame
+from project import Project
 
 # Initialize variables
 topPadding = 10
@@ -33,7 +34,7 @@ class OverviewFrame(wx.Frame):
         """
 
         # Get project data
-        self.project = project.Project(None, fileName)
+        self.project = Project(None, fileName)
 
         # Prepare frame
         super(OverviewFrame, self).__init__(parent, title=title, size=(800, 700))
@@ -50,7 +51,6 @@ class OverviewFrame(wx.Frame):
 
         self.titleText = wx.TextCtrl(panel, value=self.project.data['title'])
         self.titleText.SetInsertionPoint(0)
-
 
         # self.titleSaveButton = wx.Button(panel, label='Save')
         # buttonFont = self.titleSaveButton.GetFont()
@@ -199,6 +199,7 @@ class OverviewFrame(wx.Frame):
         endButtonFont.Weight = wx.BOLD
         self.saveButton.SetFont(endButtonFont)
         self.saveButton.Bind(wx.EVT_BUTTON, self.onSaveClicked)
+        # self.saveButton.Enable(False)
 
         self.exportButton = wx.Button(panel, label='Export')
         self.exportButton.SetFont(endButtonFont)
@@ -229,6 +230,42 @@ class OverviewFrame(wx.Frame):
         self.SetStatusText(statusText)
         self.statusText = statusText
 
+    def onTitleResetClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Reset Title button clicked')
+
+        self.titleText.SetValue(self.project.data['title'])
+
+    def onImageResetClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Reset Image button clicked')
+
+        self.imageText.SetValue(self.project.data['imageFilepath'])
+
+    def onDescriptionResetClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Reset Description button clicked')
+
+        self.descriptionText.SetValue(self.project.data['description'])
+
     def onSaveClicked(self, event):
         """
         description
@@ -238,6 +275,12 @@ class OverviewFrame(wx.Frame):
         """
 
         print('Save button clicked')
+
+        # Update project data
+        self.project.data['lastModified'] = str(datetime.now())
+
+        self.project.saveData()
+        # self.saveButton.Enable(False)
 
     def onExportClicked(self, event):
         """
@@ -258,5 +301,5 @@ class OverviewFrame(wx.Frame):
         """
 
         print('Exit to Main Menu button clicked')
-        start_frame.StartFrame(None, title='Progress Tracker', statusText=self.statusText)
+        StartFrame(None, title='Progress Tracker', statusText=self.statusText)
         self.Close(True)
