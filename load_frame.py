@@ -6,6 +6,7 @@
 # Handles loading an existing project.
 
 # Import external modules
+from datetime import datetime
 import json
 import wx
 
@@ -54,14 +55,14 @@ class LoadFrame(wx.Frame):
         vbox.Add(hbox, 0)
         vbox.AddSpacer(vGap)
 
-        # Add list of existing projects
-        self.projects = {}
+        # Create list of existing projects
+        self.projects = []
         filePath = 'data/settings.json'
 
         with open(filePath, 'r') as settingsFile:
             settings = json.load(settingsFile)
 
-            # iterate over all projects
+            # Iterate over all projects
             for fileName, visible in settings['projects'].items():
                 # Check whether the project should be shown
                 if not visible:
@@ -70,12 +71,21 @@ class LoadFrame(wx.Frame):
                 # Add the project to the list
                 with open(fileName, 'r') as projectFile:
                     projectData = json.load(projectFile)
-                    self.projects[fileName] = projectData['title']
+                    projectData['fileName'] = fileName
+                    self.projects.append(projectData)
+                    projectData['lastModified'] = datetime.strptime(projectData['lastModified'], '%Y-%m-%d %H:%M:%S.%f')
                 projectFile.close()
 
         settingsFile.close()
 
-        self.projectList = wx.ListBox(panel, 0, style=wx.LB_SINGLE, choices=list(self.projects.values()))
+        # Sort list in reverse order of last modified times
+        self.projects.sort(key=lambda item: item['lastModified'], reverse=True)
+        projectList = []
+        for project in self.projects:
+            projectList.append(project['title'])
+
+        # Display project list
+        self.projectList = wx.ListBox(panel, 0, style=wx.LB_SINGLE, choices=projectList)
         textFont = self.projectList.GetFont()
         textFont.PointSize = 13
         self.projectList.SetFont(textFont)
@@ -132,7 +142,7 @@ class LoadFrame(wx.Frame):
         print('Element ' + str(selectionNum) + ' was selected')
 
         overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
-                                     fileName=list(self.projects.keys())[selectionNum])
+                                     fileName=self.projects[selectionNum]['fileName'])
         self.Close(True)
 
     def onCancelClicked(self, event):
