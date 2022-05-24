@@ -52,11 +52,6 @@ class OverviewFrame(wx.Frame):
         self.titleText = wx.TextCtrl(panel, value=self.project.data['title'])
         self.titleText.SetInsertionPoint(0)
 
-        # self.titleSaveButton = wx.Button(panel, label='Save')
-        # buttonFont = self.titleSaveButton.GetFont()
-        # buttonFont.PointSize = 10
-        # self.titleSaveButton.SetFont(buttonFont)
-
         self.titleResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         buttonFont = self.titleResetButton.GetFont()
         buttonFont.PointSize = 10
@@ -68,8 +63,6 @@ class OverviewFrame(wx.Frame):
         hbox.Add(self.titleLabel, 0)
         hbox.AddSpacer(hGap)
         hbox.Add(self.titleText, 1, wx.EXPAND)
-        # hbox.AddSpacer(hGap)
-        # hbox.Add(self.titleSaveButton, 0)
         hbox.AddSpacer(hGap)
         hbox.Add(self.titleResetButton, 0)
         hbox.AddSpacer(sidePadding)
@@ -82,9 +75,6 @@ class OverviewFrame(wx.Frame):
 
         self.imageText = wx.TextCtrl(panel, value=self.project.data['imageFilepath'])
 
-        # self.imageSaveButton = wx.Button(panel, label='Save')
-        # self.imageSaveButton.SetFont(buttonFont)
-
         self.imageResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         self.imageResetButton.SetFont(buttonFont)
         self.imageResetButton.Bind(wx.EVT_BUTTON, self.onImageResetClicked)
@@ -94,8 +84,6 @@ class OverviewFrame(wx.Frame):
         hbox.Add(self.imageLabel, 0)
         hbox.AddSpacer(hGap)
         hbox.Add(self.imageText, 1, wx.EXPAND)
-        # hbox.AddSpacer(hGap)
-        # hbox.Add(self.imageSaveButton)
         hbox.AddSpacer(hGap)
         hbox.Add(self.imageResetButton)
         hbox.AddSpacer(sidePadding)
@@ -105,9 +93,6 @@ class OverviewFrame(wx.Frame):
         # Add description
         self.descriptionLabel = wx.StaticText(panel, label='Description:')
         self.descriptionLabel.SetFont(headingFont)
-
-        # self.descriptionSaveButton = wx.Button(panel, label='Save')
-        # self.descriptionSaveButton.SetFont(buttonFont)
 
         self.descriptionResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         self.descriptionResetButton.SetFont(buttonFont)
@@ -119,8 +104,6 @@ class OverviewFrame(wx.Frame):
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(self.descriptionLabel, 0, wx.ALIGN_LEFT)
-        # hbox.AddSpacer(hGap)
-        # hbox.Add(self.descriptionSaveButton, 0)
         hbox.AddSpacer(hGap)
         hbox.Add(self.descriptionResetButton, 0)
         hbox.AddSpacer(sidePadding)
@@ -177,6 +160,7 @@ class OverviewFrame(wx.Frame):
         self.catListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=categoryNames)
 
         self.catListAddButton = wx.Button(panel, label='+', style=wx.BU_EXACTFIT)
+        buttonFont.Weight = wx.BOLD
         self.catListAddButton.SetFont(buttonFont)
 
         self.catListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
@@ -207,8 +191,6 @@ class OverviewFrame(wx.Frame):
         # Add task list
         self.taskListLabel = wx.StaticText(panel, label='Tasks:')
         self.taskListLabel.SetFont(headingFont)
-
-        # TODO update when task dictionary is added
 
         taskNames = []
         for i in sorted(self.project.data['tasks'].keys()):
