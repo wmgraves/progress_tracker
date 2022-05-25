@@ -6,10 +6,8 @@
 # TODO: add description of this file
 
 # Import external modules
+from datetime import datetime
 import json
-
-
-# Import custom modules
 
 
 class Project():
@@ -41,6 +39,7 @@ class Project():
         """
 
         # Save project data
+        self.data['lastModified'] = str(datetime.now())
         with open(self.fileName, 'w') as projectFile:
             projectFile.write(json.dumps(self.data, indent=4))
         projectFile.close()
