@@ -128,6 +128,7 @@ class OverviewFrame(wx.Frame):
         self.wipBar.SetBackgroundColour(wx.Colour(204, 204, 0))
         self.wipBar.SetToolTip('25.00% In-Progress Tasks')
 
+        # TODO: change below to ready to start bar
         self.overdueBar = wx.Panel(panel)
         self.overdueBar.SetBackgroundColour(wx.Colour(204, 0, 0))
         self.overdueBar.SetToolTip('12.50% Overdue Tasks')
@@ -319,7 +320,7 @@ class OverviewFrame(wx.Frame):
 
         categoryNames = []
         for i in sorted(self.project.data['categories'].keys()):
-            #TODO: implement count/sum displays
+            # TODO: implement count/sum displays
             categoryNames.append(self.project.data['categories'][i]['title'])
 
         self.catListCtrl.Set(categoryNames)
@@ -341,6 +342,7 @@ class OverviewFrame(wx.Frame):
                 startText += '◧'
             else:
                 startText += '☐'
+                # TODO: use above symbol for ready to start and empty space for not yet started
             startText += ' '
 
             taskNames.append(startText + self.project.data['tasks'][i]['title'])
