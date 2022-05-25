@@ -6,11 +6,11 @@
 # TODO: add description of this file
 
 # Import external modules
-from datetime import datetime
 import wx
 
 # Import custom modules
 import start_frame
+import task_frame
 from project import Project
 
 # Initialize variables
@@ -37,7 +37,7 @@ class OverviewFrame(wx.Frame):
         self.project = Project(None, fileName)
 
         # Prepare frame
-        super(OverviewFrame, self).__init__(parent, title=title, size=(800, 700))
+        super(OverviewFrame, self).__init__(parent, title=title, size=(800, 710))
         panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.AddSpacer(topPadding)
@@ -57,6 +57,7 @@ class OverviewFrame(wx.Frame):
         buttonFont.PointSize = 10
         self.titleResetButton.SetFont(buttonFont)
         self.titleResetButton.Bind(wx.EVT_BUTTON, self.onTitleResetClicked)
+        self.titleResetButton.SetToolTip('Reset title to last saved value')
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
@@ -78,6 +79,7 @@ class OverviewFrame(wx.Frame):
         self.imageResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         self.imageResetButton.SetFont(buttonFont)
         self.imageResetButton.Bind(wx.EVT_BUTTON, self.onImageResetClicked)
+        self.imageResetButton.SetToolTip('Reset filepath to last saved value')
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
@@ -97,6 +99,7 @@ class OverviewFrame(wx.Frame):
         self.descriptionResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         self.descriptionResetButton.SetFont(buttonFont)
         self.descriptionResetButton.Bind(wx.EVT_BUTTON, self.onDescriptionResetClicked)
+        self.descriptionResetButton.SetToolTip('Reset description to last saved value')
 
         self.descriptionText = wx.TextCtrl(panel, value=self.project.data['description'], size=(-1, 150),
                                            style=wx.TE_MULTILINE)
@@ -154,33 +157,35 @@ class OverviewFrame(wx.Frame):
         self.catListLabel = wx.StaticText(panel, label='Categories:')
         self.catListLabel.SetFont(headingFont)
 
-        categoryNames = []
-        for i in sorted(self.project.data['categories'].keys()):
-            categoryNames.append(self.project.data['categories'][i])
-        self.catListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=categoryNames)
+        self.catListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=['categories not yet loaded'], size=(-1, 200))
+        self.catListCtrl.Bind(wx.EVT_LISTBOX_DCLICK, self.onCatListDClicked)
+        self.updateCatList()
 
         self.catListAddButton = wx.Button(panel, label='+', style=wx.BU_EXACTFIT)
         buttonFont.Weight = wx.BOLD
         self.catListAddButton.SetFont(buttonFont)
+        self.catListAddButton.SetToolTip('Create new category')
 
-        self.catListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
-        self.catListRemoveButton.SetFont(buttonFont)
+        # self.catListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
+        # self.catListRemoveButton.SetFont(buttonFont)
 
         self.catListUpButton = wx.Button(panel, label='▲', style=wx.BU_EXACTFIT)
         self.catListUpButton.SetFont(buttonFont)
+        self.catListUpButton.SetToolTip('Shift selected category up')
 
         self.catListDownButton = wx.Button(panel, label='▼', style=wx.BU_EXACTFIT)
         self.catListDownButton.SetFont(buttonFont)
+        self.catListDownButton.SetToolTip('Shift selected category down')
 
         tempButtonHolder = wx.BoxSizer(wx.HORIZONTAL)
         tempButtonHolder.Add(self.catListAddButton, 0)
-        tempButtonHolder.Add(self.catListRemoveButton, 0)
+        # tempButtonHolder.Add(self.catListRemoveButton, 0)
         tempButtonHolder.Add(self.catListUpButton, 0)
         tempButtonHolder.Add(self.catListDownButton, 0)
 
         temp = wx.BoxSizer(wx.VERTICAL)
         temp.Add(self.catListLabel, 0, wx.ALIGN_LEFT)
-        temp.Add(self.catListCtrl, 0, wx.EXPAND)
+        temp.Add(self.catListCtrl, 1, wx.EXPAND)
         temp.Add(tempButtonHolder, 0, wx.ALIGN_RIGHT)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -192,32 +197,34 @@ class OverviewFrame(wx.Frame):
         self.taskListLabel = wx.StaticText(panel, label='Tasks:')
         self.taskListLabel.SetFont(headingFont)
 
-        taskNames = []
-        for i in sorted(self.project.data['tasks'].keys()):
-            taskNames.append(self.project.data['tasks'][i]['title'])
-        self.taskListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=taskNames)
+        self.taskListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=['categories not yet loaded'], size=(-1, 200))
+        self.taskListCtrl.Bind(wx.EVT_LISTBOX_DCLICK, self.onTaskListDClicked)
+        self.updateTaskList()
 
         self.taskListAddButton = wx.Button(panel, label='+', style=wx.BU_EXACTFIT)
         self.taskListAddButton.SetFont(buttonFont)
+        self.taskListAddButton.SetToolTip('Create new task')
 
-        self.taskListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
-        self.taskListRemoveButton.SetFont(buttonFont)
+        # self.taskListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
+        # self.taskListRemoveButton.SetFont(buttonFont)
 
         self.taskListUpButton = wx.Button(panel, label='▲', style=wx.BU_EXACTFIT)
         self.taskListUpButton.SetFont(buttonFont)
+        self.taskListUpButton.SetToolTip('Shift selected task up')
 
         self.taskListDownButton = wx.Button(panel, label='▼', style=wx.BU_EXACTFIT)
         self.taskListDownButton.SetFont(buttonFont)
+        self.taskListDownButton.SetToolTip('Shift selected task down')
 
         tempButtonHolder = wx.BoxSizer(wx.HORIZONTAL)
         tempButtonHolder.Add(self.taskListAddButton, 0)
-        tempButtonHolder.Add(self.taskListRemoveButton, 0)
+        # tempButtonHolder.Add(self.taskListRemoveButton, 0)
         tempButtonHolder.Add(self.taskListUpButton, 0)
         tempButtonHolder.Add(self.taskListDownButton, 0)
 
         temp = wx.BoxSizer(wx.VERTICAL)
         temp.Add(self.taskListLabel, 0, wx.ALIGN_LEFT)
-        temp.Add(self.taskListCtrl, 0, wx.EXPAND)
+        temp.Add(self.taskListCtrl, 1, wx.EXPAND)
         temp.Add(tempButtonHolder, 0, wx.ALIGN_RIGHT)
 
         hbox.Add(temp, 2, wx.EXPAND)
@@ -300,6 +307,55 @@ class OverviewFrame(wx.Frame):
 
         self.descriptionText.SetValue(self.project.data['description'])
 
+    def updateCatList(self):
+        """
+        description
+
+        :return:
+        """
+
+        categoryNames = []
+        for i in sorted(self.project.data['categories'].keys()):
+            categoryNames.append(self.project.data['categories'][i]['title'])
+        self.catListCtrl.Set(categoryNames)
+        print('Category list updated')
+
+    def updateTaskList(self):
+        """
+        description
+
+        :return:
+        """
+
+        taskNames = []
+        for i in sorted(self.project.data['tasks'].keys()):
+            taskNames.append(self.project.data['tasks'][i]['title'])
+        self.taskListCtrl.Set(taskNames)
+        print('Task list updated')
+
+    def onCatListDClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Category ' + str(event.GetSelection()) + ' double-clicked')
+
+    def onTaskListDClicked(self, event):
+        """
+        descriptions
+
+        :param event:
+        :return:
+        """
+
+        print('Task ' + str(event.GetSelection()) + ' double-clicked')
+
+        task_frame.TaskFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project)
+        self.Close()
+
     def onSaveClicked(self, event):
         """
         description
@@ -311,7 +367,6 @@ class OverviewFrame(wx.Frame):
         print('Save button clicked')
 
         # Update project data
-        self.project.data['lastModified'] = str(datetime.now())
         self.project.data['title'] = self.titleText.GetValue()
         self.project.data['imageFilepath'] = self.imageText.GetValue()
         self.project.data['description'] = self.descriptionText.GetValue()
