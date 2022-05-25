@@ -135,12 +135,37 @@ class CreateFrame(wx.Frame):
             'imageFilepath': '',
             'description': self.descriptionText.GetValue(),
             'lastModified': str(datetime.now()),
+            'nextID': 4,
             'categories': {
-                1: 'Add new categories by using the buttons below'
+                0: {
+                    'id': 0,
+                    'title': 'Add new categories using the buttons below',
+                    'taskIDs': []
+                },
+                1: {
+                    'id': 1,
+                    'title': 'Double-click a category to see more details',
+                    'taskIDs': [0, 1]
+                }
             },
             'tasks': {
+                0: {
+                    'id': 2,
+                    'title': 'Add new tasks by using the buttons below',
+                    'description': 'Change the task\'s description here',
+                    'sohwInRoadmap': True,
+                    'started': False,
+                    'completed': False,
+                    'prereqTaskIDs': []
+                },
                 1: {
-                    'title': 'Add new tasks by using the buttons below'
+                    'id': 3,
+                    'title': 'Double-click a task to see more details',
+                    'description': 'Change the task\'s description here',
+                    'sohwInRoadmap': True,
+                    'started': False,
+                    'completed': False,
+                    'prereqTaskIDs': [2]
                 }
             }
         }
