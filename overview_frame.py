@@ -49,8 +49,7 @@ class OverviewFrame(wx.Frame):
         headingFont.Weight = wx.BOLD
         self.titleLabel.SetFont(headingFont)
 
-        self.titleText = wx.TextCtrl(panel, value=self.project.data['title'])
-        self.titleText.SetInsertionPoint(0)
+        self.titleText = wx.TextCtrl(panel)
 
         self.titleResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         buttonFont = self.titleResetButton.GetFont()
@@ -74,7 +73,7 @@ class OverviewFrame(wx.Frame):
         self.imageLabel = wx.StaticText(panel, label='Relative Image Filepath:')
         self.imageLabel.SetFont(headingFont)
 
-        self.imageText = wx.TextCtrl(panel, value=self.project.data['imageFilepath'])
+        self.imageText = wx.TextCtrl(panel)
 
         self.imageResetButton = wx.Button(panel, label='Reset', style=wx.BU_EXACTFIT)
         self.imageResetButton.SetFont(buttonFont)
@@ -101,8 +100,7 @@ class OverviewFrame(wx.Frame):
         self.descriptionResetButton.Bind(wx.EVT_BUTTON, self.onDescriptionResetClicked)
         self.descriptionResetButton.SetToolTip('Reset description to last saved value')
 
-        self.descriptionText = wx.TextCtrl(panel, value=self.project.data['description'], size=(-1, 150),
-                                           style=wx.TE_MULTILINE)
+        self.descriptionText = wx.TextCtrl(panel, size=(-1, 150), style=wx.TE_MULTILINE)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
@@ -159,7 +157,6 @@ class OverviewFrame(wx.Frame):
 
         self.catListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=['categories not yet loaded'], size=(-1, 200))
         self.catListCtrl.Bind(wx.EVT_LISTBOX_DCLICK, self.onCatListDClicked)
-        self.updateCatList()
 
         self.catListAddButton = wx.Button(panel, label='+', style=wx.BU_EXACTFIT)
         buttonFont.Weight = wx.BOLD
@@ -199,7 +196,6 @@ class OverviewFrame(wx.Frame):
 
         self.taskListCtrl = wx.ListBox(panel, style=wx.LB_SINGLE, choices=['categories not yet loaded'], size=(-1, 200))
         self.taskListCtrl.Bind(wx.EVT_LISTBOX_DCLICK, self.onTaskListDClicked)
-        self.updateTaskList()
 
         self.taskListAddButton = wx.Button(panel, label='+', style=wx.BU_EXACTFIT)
         self.taskListAddButton.SetFont(buttonFont)
@@ -266,6 +262,13 @@ class OverviewFrame(wx.Frame):
         self.Show()
         self.Fit()
 
+        # Fill fields with current values
+        self.titleText.SetValue(self.project.data['title'])
+        self.imageText.SetValue(self.project.data['imageFilepath'])
+        self.descriptionText.SetValue(self.project.data['description'])
+        self.updateCatList()
+        self.updateTaskList()
+
         # Add status bar
         self.CreateStatusBar()
         self.SetStatusText(statusText)
@@ -316,7 +319,9 @@ class OverviewFrame(wx.Frame):
 
         categoryNames = []
         for i in sorted(self.project.data['categories'].keys()):
+            #TODO: implement count/sum displays
             categoryNames.append(self.project.data['categories'][i]['title'])
+
         self.catListCtrl.Set(categoryNames)
         print('Category list updated')
 
@@ -329,7 +334,17 @@ class OverviewFrame(wx.Frame):
 
         taskNames = []
         for i in sorted(self.project.data['tasks'].keys()):
-            taskNames.append(self.project.data['tasks'][i]['title'])
+            startText = ''
+            if self.project.data['tasks'][i]['completed']:
+                startText += '⬛'
+            elif self.project.data['tasks'][i]['started']:
+                startText += '◧'
+            else:
+                startText += '☐'
+            startText += ' '
+
+            taskNames.append(startText + self.project.data['tasks'][i]['title'])
+
         self.taskListCtrl.Set(taskNames)
         print('Task list updated')
 
@@ -353,7 +368,8 @@ class OverviewFrame(wx.Frame):
 
         print('Task ' + str(event.GetSelection()) + ' double-clicked')
 
-        task_frame.TaskFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project)
+        task_frame.TaskFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project,
+                             taskIndex=event.GetSelection())
         self.Close()
 
     def onSaveClicked(self, event):
