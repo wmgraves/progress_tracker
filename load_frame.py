@@ -89,6 +89,7 @@ class LoadFrame(wx.Frame):
         textFont = self.projectList.GetFont()
         textFont.PointSize = 13
         self.projectList.SetFont(textFont)
+        self.projectList.Select(0)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
