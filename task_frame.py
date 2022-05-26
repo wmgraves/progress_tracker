@@ -33,9 +33,7 @@ class TaskFrame(wx.Frame):
         """
 
         # Prepare frame
-        super(TaskFrame, self).__init__(parent, title=title, size=(800, 650))
-        self.project = project
-        self.taskIndex = taskIndex
+        super(TaskFrame, self).__init__(parent, title=title, size=(800, 480))
         panel = wx.Panel(self)
 
         vboxLeft = wx.BoxSizer(wx.VERTICAL)
@@ -66,10 +64,33 @@ class TaskFrame(wx.Frame):
 
         vboxLeft.Add(self.descriptionLabel, 0)
         vboxLeft.Add(self.descriptionText, 1, wx.EXPAND)
-        # vboxLeft.AddSpacer(vGap)
+        vboxLeft.AddSpacer(vGap)
+
+        # Add status checkboxes
+        self.checkBoxLabel = wx.StaticText(panel, label='Task Status:')
+        self.checkBoxLabel.SetFont(headingFont)
+
+        self.checkBoxStarted = wx.CheckBox(panel, label='In-Progress')
+        checkBoxFont = self.checkBoxStarted.GetFont()
+        checkBoxFont.PointSize = 12
+        # checkBoxFont.Weight = wx.BOLD
+        self.checkBoxStarted.SetFont(checkBoxFont)
+        self.checkBoxStarted.Bind(wx.EVT_CHECKBOX, self.onStartedChecked)
+
+        self.checkBoxCompleted = wx.CheckBox(panel, label='Completed')
+        self.checkBoxCompleted.SetFont(checkBoxFont)
+        self.checkBoxCompleted.Bind(wx.EVT_CHECKBOX, self.onCompletedChecked)
+
+        self.checkBoxRoadmap = wx.CheckBox(panel, label='Show in Roadmap')
+        self.checkBoxRoadmap.SetFont(checkBoxFont)
+
+        vboxLeft.Add(self.checkBoxLabel, 0)
+        vboxLeft.Add(self.checkBoxStarted, 0)
+        vboxLeft.Add(self.checkBoxCompleted, 0)
+        vboxLeft.Add(self.checkBoxRoadmap, 0)
 
         # Add prereq list
-        self.prereqLabel = wx.StaticText(panel, label='Prerequisite Task Selections:')
+        self.prereqLabel = wx.StaticText(panel, label='Prerequisite Tasks:')
         self.prereqLabel.SetFont(headingFont)
 
         # TODO: add logic for adding tasks to this list
@@ -144,11 +165,38 @@ class TaskFrame(wx.Frame):
         task = project.data['tasks'][str(taskIndex)]
         self.titleText.SetValue(task['title'])
         self.descriptionText.SetValue(task['description'])
+        self.checkBoxStarted.SetValue(task['started'] or task['completed'])
+        self.checkBoxCompleted.SetValue(task['completed'])
+        self.checkBoxRoadmap.SetValue(task['showInRoadmap'])
 
         # Add status bar
         self.CreateStatusBar()
         self.SetStatusText(statusText)
+        self.project = project
+        self.taskIndex = taskIndex
         self.statusText = statusText
+
+    def onStartedChecked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        if not self.checkBoxStarted.GetValue():
+            self.checkBoxCompleted.SetValue(False)
+
+    def onCompletedChecked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        if self.checkBoxCompleted.GetValue():
+            self.checkBoxStarted.SetValue(True)
 
     def onSaveClicked(self, event):
         """
@@ -164,7 +212,12 @@ class TaskFrame(wx.Frame):
         task = self.project.data['tasks'][str(self.taskIndex)]
         task['title'] = self.titleText.GetValue()
         task['description'] = self.descriptionText.GetValue()
-        # TODO: finish implementing this
+        if task['completed'] and not self.checkBoxCompleted.GetValue():
+            task['completionDate'] = str(datetime.now())
+        task['started'] = self.checkBoxStarted.GetValue() or self.checkBoxCompleted.GetValue()
+        task['completed'] = self.checkBoxCompleted.GetValue()
+        task['showInRoadmap'] = self.checkBoxRoadmap.GetValue()
+        # TODO: finish implementing this (prereqs)
 
         self.project.saveData()
         overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
