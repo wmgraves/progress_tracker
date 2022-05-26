@@ -179,7 +179,7 @@ class OverviewFrame(wx.Frame):
         if notReadyCount > 0 or numTasks <= 0:
             self.otherBar = wx.Panel(panel, size=(-1, 25))
             self.otherBar.SetBackgroundColour(wx.Colour(160, 160, 160))
-            self.otherBar.SetToolTip('{:.2f}% Tasks unavailable'.format(100.0 * notReadyCount / numTasks))
+            self.otherBar.SetToolTip('{:.2f}% Tasks Unavailable'.format(100.0 * notReadyCount / numTasks))
             self.progressBox.Add(self.otherBar, notReadyCount, wx.EXPAND)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
