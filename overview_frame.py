@@ -116,32 +116,71 @@ class OverviewFrame(wx.Frame):
         vbox.Add(hbox, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
+        # Calculate progress values
+        numTasks = len(self.project.data['tasks'])
+        completedCount = 0
+        wipCount = 0
+        readyCount = 0
+        notReadyCount = 0
+
+        for i in self.project.data['tasks']:
+            task = self.project.data['tasks'][i]
+
+            # Handle completed tasks
+            if task['completed']:
+                completedCount += 1
+                continue
+            # Handle in-progress tasks
+            elif task['started']:
+                wipCount += 1
+                continue
+
+            # Determine if all prerequisites have been completed
+            ready = True
+            for j in self.project.data['tasks']:
+                # Check if current task is a prerequisite
+                if self.project.data['tasks'][j]['id'] not in task['prereqTaskIDs']:
+                    continue
+
+                # Check if task has been completed
+                if not self.project.data['tasks'][j]['completed']:
+                    ready = False
+                    break
+
+            if ready:
+                readyCount += 1
+            else:
+                notReadyCount += 1
+
         # Add progress display
         self.progressLabel = wx.StaticText(panel, label='Progress:')
         self.progressLabel.SetFont(headingFont)
 
-        self.completedBar = wx.Panel(panel, size=(-1, 25))
-        self.completedBar.SetBackgroundColour(wx.Colour(0, 204, 0))
-        self.completedBar.SetToolTip('50.00% Completed Tasks')
-
-        self.wipBar = wx.Panel(panel)
-        self.wipBar.SetBackgroundColour(wx.Colour(204, 204, 0))
-        self.wipBar.SetToolTip('25.00% In-Progress Tasks')
-
-        # TODO: change below to ready to start bar
-        self.overdueBar = wx.Panel(panel)
-        self.overdueBar.SetBackgroundColour(wx.Colour(204, 0, 0))
-        self.overdueBar.SetToolTip('12.50% Overdue Tasks')
-
-        self.otherBar = wx.Panel(panel)
-        self.otherBar.SetBackgroundColour(wx.Colour(160, 160, 160))
-        self.otherBar.SetToolTip('12.50% Other Tasks')
-
         self.progressBox = wx.BoxSizer(wx.HORIZONTAL)
-        self.progressBox.Add(self.completedBar, 4, wx.EXPAND)
-        self.progressBox.Add(self.wipBar, 2, wx.EXPAND)
-        self.progressBox.Add(self.overdueBar, 1, wx.EXPAND)
-        self.progressBox.Add(self.otherBar, 1, wx.EXPAND)
+
+        if completedCount > 0:
+            self.completedBar = wx.Panel(panel, size=(-1, 25))
+            self.completedBar.SetBackgroundColour(wx.Colour(0, 204, 0))
+            self.completedBar.SetToolTip('{:.2f}% Tasks Completed'.format(100.0 * completedCount / numTasks))
+            self.progressBox.Add(self.completedBar, completedCount, wx.EXPAND)
+
+        if wipCount > 0:
+            self.wipBar = wx.Panel(panel, size=(-1, 25))
+            self.wipBar.SetBackgroundColour(wx.Colour(204, 204, 0))
+            self.wipBar.SetToolTip('{:.2f}% Tasks In-Progress'.format(100.0 * wipCount / numTasks))
+            self.progressBox.Add(self.wipBar, wipCount, wx.EXPAND)
+
+        if readyCount > 0:
+            self.readyBar = wx.Panel(panel, size=(-1, 25))
+            self.readyBar.SetBackgroundColour(wx.Colour(0, 102, 204))
+            self.readyBar.SetToolTip('{:.2f}% Tasks Available to Start'.format(100.0 * readyCount / numTasks))
+            self.progressBox.Add(self.readyBar, readyCount, wx.EXPAND)
+
+        if notReadyCount > 0 or numTasks <= 0:
+            self.otherBar = wx.Panel(panel, size=(-1, 25))
+            self.otherBar.SetBackgroundColour(wx.Colour(160, 160, 160))
+            self.otherBar.SetToolTip('{:.2f}% Tasks unavailable'.format(100.0 * notReadyCount / numTasks))
+            self.progressBox.Add(self.otherBar, notReadyCount, wx.EXPAND)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
