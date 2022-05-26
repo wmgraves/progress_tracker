@@ -153,18 +153,20 @@ class CreateFrame(wx.Frame):
                     'id': 2,
                     'title': 'Add new tasks by using the buttons below',
                     'description': 'Change the task\'s description here',
-                    'sohwInRoadmap': True,
+                    'showInRoadmap': True,
                     'started': True,
                     'completed': True,
+                    'completionDate': '2022-05-25 20:05:04.524616',
                     'prereqTaskIDs': []
                 },
                 1: {
                     'id': 3,
                     'title': 'Double-click a task to see more details',
                     'description': 'Change the task\'s description here',
-                    'sohwInRoadmap': True,
+                    'showInRoadmap': True,
                     'started': True,
                     'completed': False,
+                    'completionDate': '',
                     'prereqTaskIDs': [2]
                 }
             }
