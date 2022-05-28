@@ -69,6 +69,7 @@ class Project():
         taskData['completionDate'] = ''
         taskData['prereqTaskIDs'] = []
 
+        print('Task (id=' + taskData['id'] + ') created')
         return int(taskIndex)
 
     def deleteTask(self, taskIndex):
@@ -87,4 +88,37 @@ class Project():
             elif i > taskIndex:
                 newTaskList[str(i - 1)] = self.data['tasks'][str(i - 1)]
 
+        print('Task (id=' + self.data['tasks'][str(taskIndex)]['id'] + ') deleted')
         self.data['tasks'] = newTaskList
+
+    def shiftTaskUp(self, taskIndex):
+        """
+        description
+
+        :param taskIndex:
+        :return:
+        """
+
+        if taskIndex > 0:
+            temp = self.data['tasks'][str(taskIndex)]
+            self.data['tasks'][str(taskIndex)] = self.data['tasks'][str(taskIndex - 1)]
+            self.data['tasks'][str(taskIndex - 1)] = temp
+
+            self.saveData()
+            print('Swapped positions of tasks (id=' + str(self.data['tasks'][str(taskIndex)]['id']) + ') and (id=' +
+                  str(self.data['tasks'][str(taskIndex)]['id']) + ')')
+        else:
+            print('Selected task cannot be shifted up - it is already at the top of the list')
+
+    def shiftTaskDown(self, taskIndex):
+        """
+        description
+
+        :param taskIndex:
+        :return:
+        """
+
+        if taskIndex < len(self.data['tasks']) - 1:
+            self.shiftTaskUp(taskIndex + 1)
+        else:
+            print('Selected task cannot be shifted down - it is already at the bottom of the list')

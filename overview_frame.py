@@ -242,10 +242,12 @@ class OverviewFrame(wx.Frame):
         self.taskListUpButton = wx.Button(panel, label='▲', style=wx.BU_EXACTFIT)
         self.taskListUpButton.SetFont(buttonFont)
         self.taskListUpButton.SetToolTip('Shift selected task up')
+        self.taskListUpButton.Bind(wx.EVT_BUTTON, self.onTaskShiftUpClicked)
 
         self.taskListDownButton = wx.Button(panel, label='▼', style=wx.BU_EXACTFIT)
         self.taskListDownButton.SetFont(buttonFont)
         self.taskListDownButton.SetToolTip('Shift selected task down')
+        self.taskListDownButton.Bind(wx.EVT_BUTTON, self.onTaskShiftDownClicked)
 
         tempButtonHolder = wx.BoxSizer(wx.HORIZONTAL)
         tempButtonHolder.Add(self.taskListAddButton, 0)
@@ -438,13 +440,47 @@ class OverviewFrame(wx.Frame):
         :return:
         """
 
-        print('Task List Add button clicked')
+        print('Add task button clicked')
 
         # Create the task and allow the user to edit it
         newTaskIndex = self.project.createTask()
         task_frame.TaskFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project,
                              taskIndex=newTaskIndex)
         self.Close()
+
+    def onTaskShiftUpClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Shift Task Up button clicked ')
+
+        selectionIndex = self.taskListCtrl.GetSelection()
+        self.project.shiftTaskUp(selectionIndex)
+        self.updateTaskList()
+
+        newSelectionIndex = max(0, selectionIndex - 1)
+        self.taskListCtrl.Select(newSelectionIndex)
+
+    def onTaskShiftDownClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Shift Task Down button clicked ')
+
+        selectionIndex = self.taskListCtrl.GetSelection()
+        self.project.shiftTaskDown(selectionIndex)
+        self.updateTaskList()
+
+        newSelectionIndex = min(len(self.project.data['tasks']) - 1, selectionIndex + 1)
+        self.taskListCtrl.Select(newSelectionIndex)
 
     def onSaveClicked(self, event):
         """
