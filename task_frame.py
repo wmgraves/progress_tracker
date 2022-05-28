@@ -93,8 +93,9 @@ class TaskFrame(wx.Frame):
         self.prereqLabel = wx.StaticText(panel, label='Prerequisite Tasks:')
         self.prereqLabel.SetFont(headingFont)
 
-        # TODO: add logic for adding tasks to this list
         taskNames = []
+        selectionIndices = []
+
         for i, taskData in project.data['tasks'].items():
             # Skip this task (a task cannot be a prerequisite to itself)
             if int(i) == taskIndex:
@@ -111,7 +112,16 @@ class TaskFrame(wx.Frame):
             startText += ' '
             taskNames.append(startText + project.data['tasks'][i]['title'])
 
+            # Select task if it is a prerequisite
+            if project.data['tasks'][i]['id'] in project.data['tasks'][str(taskIndex)]['prereqTaskIDs']:
+                if int(i) < taskIndex:
+                    selectionIndices.append(int(i))
+                else:
+                    selectionIndices.append(int(i) - 1)
+
         self.prereqList = wx.ListBox(panel, style=wx.LB_MULTIPLE, choices=taskNames)
+        for i in selectionIndices:
+            self.prereqList.Select(i)
 
         vboxRight = wx.BoxSizer(wx.VERTICAL)
         vboxRight.Add(self.prereqLabel, 0)
@@ -210,14 +220,28 @@ class TaskFrame(wx.Frame):
 
         # Update task data
         task = self.project.data['tasks'][str(self.taskIndex)]
+
         task['title'] = self.titleText.GetValue()
         task['description'] = self.descriptionText.GetValue()
-        if task['completed'] and not self.checkBoxCompleted.GetValue():
-            task['completionDate'] = str(datetime.now())
+
+        if self.checkBoxCompleted.GetValue():
+            if not task['completed']:
+                task['completionDate'] = str(datetime.now())
+        else:
+            task['completionDate'] = ''
+
         task['started'] = self.checkBoxStarted.GetValue() or self.checkBoxCompleted.GetValue()
         task['completed'] = self.checkBoxCompleted.GetValue()
         task['showInRoadmap'] = self.checkBoxRoadmap.GetValue()
-        # TODO: finish implementing this (prereqs)
+
+        prereqIDs = []
+        for i in self.prereqList.GetSelections():
+            if i < self.taskIndex:
+                prereqIDs.append(self.project.data['tasks'][str(i)]['id'])
+            else:
+                prereqIDs.append(self.project.data['tasks'][str(i + 1)]['id'])
+        task['prereqTaskIDs'] = prereqIDs
+        # TODO: add started date to create_frame and this one - could be a nice thing to visualize when exporting data
 
         self.project.saveData()
         overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
