@@ -258,7 +258,11 @@ class TaskFrame(wx.Frame):
 
         print('Delete button clicked')
 
-        # TODO: implement this
+        self.project.deleteTask(self.taskIndex)
+        self.project.saveData()
+        overview_frame.OverviewFrame(None, title='Progress Tracker', statusText=self.statusText,
+                                     fileName=self.project.fileName)
+        self.Close(True)
 
     def onExitClicked(self, event):
         """

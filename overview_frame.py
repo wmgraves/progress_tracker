@@ -164,10 +164,16 @@ class OverviewFrame(wx.Frame):
             self.readyBar.SetToolTip('{:.2f}% Tasks Available to Start'.format(100.0 * readyCount / numTasks))
             self.progressBox.Add(self.readyBar, readyCount, wx.EXPAND)
 
-        if notReadyCount > 0 or numTasks <= 0:
+        if notReadyCount > 0:
             self.otherBar = wx.Panel(panel, size=(-1, 25))
             self.otherBar.SetBackgroundColour(wx.Colour(160, 160, 160))
             self.otherBar.SetToolTip('{:.2f}% Tasks Unavailable'.format(100.0 * notReadyCount / numTasks))
+            self.progressBox.Add(self.otherBar, notReadyCount, wx.EXPAND)
+
+        if numTasks <= 0:
+            self.otherBar = wx.Panel(panel, size=(-1, 25))
+            self.otherBar.SetBackgroundColour(wx.Colour(160, 160, 160))
+            self.otherBar.SetToolTip('No tasks exist - create some now using the buttons below!')
             self.progressBox.Add(self.otherBar, notReadyCount, wx.EXPAND)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)

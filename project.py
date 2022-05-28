@@ -69,4 +69,22 @@ class Project():
         taskData['completionDate'] = ''
         taskData['prereqTaskIDs'] = []
 
-        return taskIndex
+        return int(taskIndex)
+
+    def deleteTask(self, taskIndex):
+        """
+        description
+
+        :return:
+        """
+
+        # Create a new task list with new indices
+        newTaskList = {}
+
+        for i in range(len(self.data['tasks'])):
+            if i < taskIndex:
+                newTaskList[str(i)] = self.data['tasks'][str(i)]
+            elif i > taskIndex:
+                newTaskList[str(i - 1)] = self.data['tasks'][str(i - 1)]
+
+        self.data['tasks'] = newTaskList
