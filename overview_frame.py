@@ -129,25 +129,11 @@ class OverviewFrame(wx.Frame):
             # Handle completed tasks
             if task['completed']:
                 completedCount += 1
-                continue
             # Handle in-progress tasks
             elif task['started']:
                 wipCount += 1
-                continue
-
             # Determine if all prerequisites have been completed
-            ready = True
-            for j in self.project.data['tasks']:
-                # Check if current task is a prerequisite
-                if self.project.data['tasks'][j]['id'] not in task['prereqTaskIDs']:
-                    continue
-
-                # Check if task has been completed
-                if not self.project.data['tasks'][j]['completed']:
-                    ready = False
-                    break
-
-            if ready:
+            elif self.taskPrereqsCompleted(task, self.project.data['tasks']):
                 readyCount += 1
             else:
                 notReadyCount += 1
@@ -157,6 +143,8 @@ class OverviewFrame(wx.Frame):
         self.progressLabel.SetFont(headingFont)
 
         self.progressBox = wx.BoxSizer(wx.HORIZONTAL)
+
+        # TODO: add onclick handlers for all progress bars that show a filtered list of related tasks
 
         if completedCount > 0:
             self.completedBar = wx.Panel(panel, size=(-1, 25))
@@ -240,6 +228,7 @@ class OverviewFrame(wx.Frame):
         self.taskListAddButton = wx.Button(panel, label='+', style=wx.BU_EXACTFIT)
         self.taskListAddButton.SetFont(buttonFont)
         self.taskListAddButton.SetToolTip('Create new task')
+        self.taskListAddButton.Bind(wx.EVT_BUTTON, self.onTaskListAddClicked)
 
         # self.taskListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
         # self.taskListRemoveButton.SetFont(buttonFont)
@@ -376,18 +365,40 @@ class OverviewFrame(wx.Frame):
         for i in sorted(self.project.data['tasks'].keys()):
             startText = ''
             if self.project.data['tasks'][i]['completed']:
-                startText += '⬛'
+                startText += '⬛ '
             elif self.project.data['tasks'][i]['started']:
-                startText += '◧'
+                startText += '◧ '
+            elif self.taskPrereqsCompleted(self.project.data['tasks'][i], self.project.data['tasks']):
+                startText += '☐ '
             else:
-                startText += '☐'
-                # TODO: use above symbol for ready to start and empty space for not yet started
-            startText += ' '
+                startText += '-- '
 
             taskNames.append(startText + self.project.data['tasks'][i]['title'])
 
         self.taskListCtrl.Set(taskNames)
         print('Task list updated')
+
+    def taskPrereqsCompleted(self, task, tasks):
+        """
+        description
+
+        :param task:
+        :param tasks:
+        :return:
+        """
+
+        prereqsCompleted = True
+        for i in tasks:
+            # Check if current task is a prerequisite
+            if tasks[i]['id'] not in task['prereqTaskIDs']:
+                continue
+
+            # Check if task has been completed
+            if not tasks[i]['completed']:
+                prereqsCompleted = False
+                break
+
+        return prereqsCompleted
 
     def onCatListDClicked(self, event):
         """
@@ -411,6 +422,22 @@ class OverviewFrame(wx.Frame):
 
         task_frame.TaskFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project,
                              taskIndex=event.GetSelection())
+        self.Close()
+
+    def onTaskListAddClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Task List Add button clicked')
+
+        # Create the task and allow the user to edit it
+        newTaskIndex = self.project.createTask()
+        task_frame.TaskFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project,
+                             taskIndex=newTaskIndex)
         self.Close()
 
     def onSaveClicked(self, event):
