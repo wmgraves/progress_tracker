@@ -45,3 +45,28 @@ class Project():
         projectFile.close()
 
         print('Saved project data to file (' + self.fileName + ')')
+
+    def createTask(self):
+        """
+        description
+
+        :return:
+        """
+
+        # Create new task with default data
+        taskIndex = str(len(self.data['tasks']))
+        taskData = {}
+        self.data['tasks'][taskIndex] = taskData
+
+        taskData['id'] = self.data['nextID']
+        self.data['nextID'] = self.data['nextID'] + 1
+
+        taskData['title'] = 'Enter a title for the task here'
+        taskData['description'] = 'Enter a description for the task here'
+        taskData['showInRoadmap'] = False
+        taskData['started'] = False
+        taskData['completed'] = False
+        taskData['completionDate'] = ''
+        taskData['prereqTaskIDs'] = []
+
+        return taskIndex
