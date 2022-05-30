@@ -16,7 +16,7 @@ Here is what you need to be able to run this program:
   - [X] Main Menu
   - [X] Create Project
   - [ ] Project Overview
-  - [ ] Create/Edit Task
+  - [X] Create/Edit Task
 - [X] Loading/Saving Project Data
 - [X] Settings
 - [ ] Export Options
