@@ -46,6 +46,80 @@ class Project():
 
         print('Saved project data to file (' + self.fileName + ')')
 
+    def createCategory(self):
+        """
+        description
+
+        :return:
+        """
+
+        # Create a new task with default data
+        categoryIndex = str(len(self.data['categories']))
+        categoryData = {}
+        self.data['categories'][categoryIndex] = categoryData
+
+        categoryData['id'] = self.data['nextID']
+        self.data['nextID'] = self.data['nextID'] + 1
+
+        categoryData['title'] = 'Enter a title for the category here'
+        categoryData['taskIDs'] = []
+
+        print('Category (id=' + str(categoryData['id']) + ') created')
+        return int(categoryIndex)
+
+    def deleteCategory(self, categoryIndex):
+        """
+        description
+
+        :param categoryIndex:
+        :return:
+        """
+
+        # Create a new task list with new indices
+        newCategoryList = {}
+
+        for i in range(len(self.data['categories'])):
+            if i < categoryIndex:
+                newCategoryList[str(i)] = self.data['categories'][str(i)]
+            elif i > categoryIndex:
+                newCategoryList[str(i - 1)] = self.data['categories'][str(i)]
+
+        print('Category (id=' + str(self.data['categories'][str(categoryIndex)]['id']) + ') deleted')
+        self.data['categories'] = newCategoryList
+
+    def shiftCategoryUp(self, categoryIndex):
+        """
+        description
+
+        :param categoryIndex:
+        :return:
+        """
+
+        if categoryIndex > 0:
+            temp = self.data['categories'][str(categoryIndex)]
+            self.data['categories'][str(categoryIndex)] = self.data['categories'][str(categoryIndex - 1)]
+            self.data['categories'][str(categoryIndex - 1)] = temp
+
+            self.saveData()
+            print('Swapped positions of categories (id=' + str(
+                self.data['categories'][str(categoryIndex)]['id']) + ') and (id=' + str(
+                self.data['categories'][str(categoryIndex - 1)]['id']) + ')')
+        else:
+            print('Selected category cannot be shifted up - it is already at the top of the list')
+
+    def shiftCategoryDown(self, categoryIndex):
+        """
+        description
+
+        :param categoryIndex:
+        :return:
+        """
+
+        if categoryIndex < len(self.data['categories']) - 1:
+            self.shiftCategoryUp(categoryIndex + 1)
+        else:
+            print('Selected category cannot be shifted down - it is already at the bottom of the list')
+
     def createTask(self):
         """
         description
@@ -69,13 +143,14 @@ class Project():
         taskData['completionDate'] = ''
         taskData['prereqTaskIDs'] = []
 
-        print('Task (id=' + taskData['id'] + ') created')
+        print('Task (id=' + str(taskData['id']) + ') created')
         return int(taskIndex)
 
     def deleteTask(self, taskIndex):
         """
         description
 
+        :param taskIndex:
         :return:
         """
 
@@ -86,9 +161,9 @@ class Project():
             if i < taskIndex:
                 newTaskList[str(i)] = self.data['tasks'][str(i)]
             elif i > taskIndex:
-                newTaskList[str(i - 1)] = self.data['tasks'][str(i - 1)]
+                newTaskList[str(i - 1)] = self.data['tasks'][str(i)]
 
-        print('Task (id=' + self.data['tasks'][str(taskIndex)]['id'] + ') deleted')
+        print('Task (id=' + str(self.data['tasks'][str(taskIndex)]['id']) + ') deleted')
         self.data['tasks'] = newTaskList
 
     def shiftTaskUp(self, taskIndex):
@@ -106,7 +181,7 @@ class Project():
 
             self.saveData()
             print('Swapped positions of tasks (id=' + str(self.data['tasks'][str(taskIndex)]['id']) + ') and (id=' +
-                  str(self.data['tasks'][str(taskIndex)]['id']) + ')')
+                  str(self.data['tasks'][str(taskIndex - 1)]['id']) + ')')
         else:
             print('Selected task cannot be shifted up - it is already at the top of the list')
 

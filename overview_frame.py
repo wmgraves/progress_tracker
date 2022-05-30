@@ -10,6 +10,7 @@ import wx
 
 # Import custom modules
 import start_frame
+import category_frame
 import task_frame
 from project import Project
 
@@ -174,7 +175,7 @@ class OverviewFrame(wx.Frame):
             self.otherBar = wx.Panel(panel, size=(-1, 25))
             self.otherBar.SetBackgroundColour(wx.Colour(160, 160, 160))
             self.otherBar.SetToolTip('No tasks exist - create some now using the buttons below!')
-            self.progressBox.Add(self.otherBar, notReadyCount, wx.EXPAND)
+            self.progressBox.Add(self.otherBar, 1, wx.EXPAND)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
@@ -196,6 +197,7 @@ class OverviewFrame(wx.Frame):
         buttonFont.Weight = wx.BOLD
         self.catListAddButton.SetFont(buttonFont)
         self.catListAddButton.SetToolTip('Create new category')
+        self.catListAddButton.Bind(wx.EVT_BUTTON, self.onCatListAddClicked)
 
         # self.catListRemoveButton = wx.Button(panel, label='-', style=wx.BU_EXACTFIT)
         # self.catListRemoveButton.SetFont(buttonFont)
@@ -203,10 +205,12 @@ class OverviewFrame(wx.Frame):
         self.catListUpButton = wx.Button(panel, label='▲', style=wx.BU_EXACTFIT)
         self.catListUpButton.SetFont(buttonFont)
         self.catListUpButton.SetToolTip('Shift selected category up')
+        self.catListUpButton.Bind(wx.EVT_BUTTON, self.onCatShiftUpClicked)
 
         self.catListDownButton = wx.Button(panel, label='▼', style=wx.BU_EXACTFIT)
         self.catListDownButton.SetFont(buttonFont)
         self.catListDownButton.SetToolTip('Shift selected category down')
+        self.catListDownButton.Bind(wx.EVT_BUTTON, self.onCatShiftDownClicked)
 
         tempButtonHolder = wx.BoxSizer(wx.HORIZONTAL)
         tempButtonHolder.Add(self.catListAddButton, 0)
@@ -355,9 +359,19 @@ class OverviewFrame(wx.Frame):
         """
 
         categoryNames = []
-        for i in sorted(self.project.data['categories'].keys()):
-            # TODO: implement count/sum displays
-            categoryNames.append(self.project.data['categories'][i]['title'])
+        for i in self.project.data['categories'].keys():
+            countTasks = 0
+            countCompleted = 0
+
+            for task in self.project.data['tasks'].values():
+                if task['id'] in self.project.data['categories'][i]['taskIDs']:
+                    countTasks += 1
+
+                    if task['completed']:
+                        countCompleted += 1
+            startText = '( ' + str(countCompleted) + ' / ' + str(countTasks) + ' )\t'
+
+            categoryNames.append(startText + self.project.data['categories'][i]['title'])
 
         self.catListCtrl.Set(categoryNames)
         print('Category list updated')
@@ -370,7 +384,7 @@ class OverviewFrame(wx.Frame):
         """
 
         taskNames = []
-        for i in sorted(self.project.data['tasks'].keys()):
+        for i in self.project.data['tasks'].keys():
             startText = ''
             if self.project.data['tasks'][i]['completed']:
                 startText += '⬛ '
@@ -418,6 +432,10 @@ class OverviewFrame(wx.Frame):
 
         print('Category ' + str(event.GetSelection()) + ' double-clicked')
 
+        category_frame.CategoryFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project,
+                                     categoryIndex=event.GetSelection())
+        self.Close()
+
     def onTaskListDClicked(self, event):
         """
         descriptions
@@ -430,6 +448,22 @@ class OverviewFrame(wx.Frame):
 
         task_frame.TaskFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project,
                              taskIndex=event.GetSelection())
+        self.Close()
+
+    def onCatListAddClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Add category button clicked')
+
+        # Create the category and allow the user to edit it
+        newCategoryIndex = self.project.createCategory()
+        category_frame.CategoryFrame(None, title='Progress Tracker', statusText=self.statusText, project=self.project,
+                                     categoryIndex=newCategoryIndex)
         self.Close()
 
     def onTaskListAddClicked(self, event):
@@ -448,6 +482,23 @@ class OverviewFrame(wx.Frame):
                              taskIndex=newTaskIndex)
         self.Close()
 
+    def onCatShiftUpClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Shift Category Up button clicked')
+
+        selectionIndex = self.catListCtrl.GetSelection()
+        self.project.shiftCategoryUp(selectionIndex)
+        self.updateCatList()
+
+        newSelectionIndex = max(0, selectionIndex - 1)
+        self.catListCtrl.Select(newSelectionIndex)
+
     def onTaskShiftUpClicked(self, event):
         """
         description
@@ -456,7 +507,7 @@ class OverviewFrame(wx.Frame):
         :return:
         """
 
-        print('Shift Task Up button clicked ')
+        print('Shift Task Up button clicked')
 
         selectionIndex = self.taskListCtrl.GetSelection()
         self.project.shiftTaskUp(selectionIndex)
@@ -464,6 +515,23 @@ class OverviewFrame(wx.Frame):
 
         newSelectionIndex = max(0, selectionIndex - 1)
         self.taskListCtrl.Select(newSelectionIndex)
+
+    def onCatShiftDownClicked(self, event):
+        """
+        description
+
+        :param event:
+        :return:
+        """
+
+        print('Shift Category Down button clicked ')
+
+        selectionIndex = self.catListCtrl.GetSelection()
+        self.project.shiftCategoryDown(selectionIndex)
+        self.updateCatList()
+
+        newSelectionIndex = min(len(self.project.data['categories']) - 1, selectionIndex + 1)
+        self.catListCtrl.Select(newSelectionIndex)
 
     def onTaskShiftDownClicked(self, event):
         """
