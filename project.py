@@ -46,6 +46,18 @@ class Project():
 
         print('Saved project data to file (' + self.fileName + ')')
 
+    def setExportFilepath(self, filePath):
+        """
+        description
+
+        :param filePath:
+        :return:
+        """
+
+        self.data['exportFilepath'] = filePath
+
+        print('Updated default export filepath to %s' % filePath)
+
     def createCategory(self):
         """
         description

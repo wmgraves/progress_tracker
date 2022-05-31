@@ -578,6 +578,72 @@ class OverviewFrame(wx.Frame):
 
         print('Export button clicked')
 
+        with wx.FileDialog(self, 'Export Project Data', wildcard='Markdown Files (*.md)|*.md',
+                           style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as fileDialog:
+            # Set a default directory if one exists
+            if len(self.project.data['exportFilepath']) > 0:
+                fileDialog.SetPath(self.project.data['exportFilepath'])
+
+            # Handle cancelling
+            if fileDialog.ShowModal() == wx.ID_CANCEL:
+                print('Export cancelled')
+                return
+
+            # Handle saving
+            # directory = fileDialog.GetDirectory()
+            filePath = fileDialog.GetPath()
+
+            try:
+                with open(filePath, 'w') as file:
+                    self.project.setExportFilepath(filePath)
+
+                    # Handle markdown files
+                    if fileDialog.GetWildcard() == 'Markdown Files (*.md)|*.md':
+                        # Handle displaying the project logo if one exists
+                        if len(self.project.data['imageFilepath']) > 0:
+                            file.write('![{title} Logo]({imageFilepath})\n\n'.format(title=self.project.data['title'],
+                                                                                     imageFilepath=self.project.data[
+                                                                                         'imageFilepath']))
+                        else:
+                            file.write('# {title}\n\n'.format(title=self.project.data['title']))
+
+                        # Display project description
+                        file.write(self.project.data['description'] + '\n\n')
+
+                        # Display all categories with major tasks
+                        file.write('# Roadmap\n')
+
+                        for category in self.project.data['categories'].values():
+                            startText = '- ['
+                            midText = '] '
+                            checkBoxChar = 'X'
+                            taskLabels = '\n'
+
+                            # Check whether all related tasks have been completed
+                            for task in self.project.data['tasks'].values():
+                                # Check whether the task is related
+                                if task['id'] not in category['taskIDs']:
+                                    continue
+
+                                # Check whether task has been completed
+                                if not task['completed']:
+                                    checkBoxChar = ' '
+
+                                # Check whether task should be shown in the roadmap
+                                if task['showInRoadmap']:
+                                    taskLabels += '  ' + startText + ('X' if task['completed'] else ' ') + midText + \
+                                                  task['title'] + '\n'
+
+                            # Write results
+                            file.write(startText + checkBoxChar + midText + category['title'])
+                            file.write(taskLabels)
+
+                file.close()
+                print('Exported project data to %s' % filePath)
+
+            except IOError:
+                print('Export failed - cannot save data in file %s' % filePath)
+
     def onExitClicked(self, event):
         """
         description

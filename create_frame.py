@@ -133,6 +133,7 @@ class CreateFrame(wx.Frame):
         projectData = {
             'title': self.titleText.GetValue(),
             'imageFilepath': '',
+            'exportFilepath': '',
             'description': self.descriptionText.GetValue(),
             'lastModified': str(datetime.now()),
             'nextID': 4,
