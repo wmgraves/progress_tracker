@@ -36,7 +36,7 @@ class PanelManager(wx.Frame):
         self.CreateStatusBar()
         self.SetStatusText(self.stringsData['panel_manager']['statusText'])
 
-        # Display the initial frame
+        # Display the main menu
         panelList = {
             'main_menu_panel': {
                 'className': 'MainMenuPanel',
@@ -53,12 +53,16 @@ class PanelManager(wx.Frame):
         :return:
         """
 
+        # Remove existing panels, if any
+        if self.GetSizer() is not None:
+            self.GetSizer().Clear(True)
+
         # Create sizer
         hbox = wx.BoxSizer(wx.HORIZONTAL)
 
         # Add panels
         for moduleName, frameData in panelList.items():
-            # Create panel
+            # Check whether panel already exists
             currentModule = importlib.import_module(moduleName)
             currentClass = getattr(currentModule, frameData['className'])
             currentPanel = currentClass(parent=self, stringsData=self.stringsData[moduleName])
@@ -68,3 +72,5 @@ class PanelManager(wx.Frame):
 
         # Show sizer
         self.SetSizer(hbox)
+        self.Layout()
+        self.Update()
