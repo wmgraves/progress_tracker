@@ -1,0 +1,70 @@
+# progress_tracker - panel_manager.py
+# Created by: wmgraves (https://github.com/wmgraves)
+# Created on: 07/03/2022
+
+# Description:
+# TODO: add description of this file
+
+# Import external modules
+import wx
+import json
+import importlib
+
+# Import custom modules
+# TODO: imports
+
+
+class PanelManager(wx.Frame):
+    """
+    Text
+    """
+
+    def __init__(self, parent):
+        """
+        text
+
+        :param parent:
+        """
+
+        # Load strings resource file
+        with open('resources/strings.json', 'r') as stringsFile:
+            self.stringsData = json.load(stringsFile)
+        stringsFile.close()
+
+        # Create the main frame
+        wx.Frame.__init__(self, None, title=self.stringsData['panel_manager']['title'])
+        self.CreateStatusBar()
+        self.SetStatusText(self.stringsData['panel_manager']['statusText'])
+
+        # Display the initial frame
+        panelList = {
+            'main_menu_panel': {
+                'className': 'MainMenuPanel',
+                'size': 1
+            }
+        }
+        self.showPanels(panelList)
+
+    def showPanels(self, panelList):
+        """
+        text
+
+        :param panelList:
+        :return:
+        """
+
+        # Create sizer
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        # Add panels
+        for moduleName, frameData in panelList.items():
+            # Create panel
+            currentModule = importlib.import_module(moduleName)
+            currentClass = getattr(currentModule, frameData['className'])
+            currentPanel = currentClass(parent=self, stringsData=self.stringsData[moduleName])
+
+            # Add panel to sizer
+            hbox.Add(currentPanel, frameData['size'], wx.EXPAND)
+
+        # Show sizer
+        self.SetSizer(hbox)
