@@ -31,6 +31,8 @@ class CreateProjectPanel(wx.Panel):
         :param stringsData:
         """
 
+        self.panelManager = parent
+
         # Create panel
         wx.Panel.__init__(self, parent)
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -90,3 +92,49 @@ class CreateProjectPanel(wx.Panel):
         hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
+
+        # Add buttons
+        self.createButton = wx.Button(self, label=stringsData['createButton'])
+        self.createButton.SetFont(labelFont)
+        self.createButton.Bind(wx.EVT_BUTTON, self.onCreateClicked)
+
+        self.cancelButton = wx.Button(self, label=stringsData['cancelButton'])
+        self.cancelButton.SetFont(labelFont)
+        self.cancelButton.Bind(wx.EVT_BUTTON, self.onCancelClicked)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.AddSpacer(sidePadding)
+        hbox.Add(self.createButton, 0)
+        hbox.AddSpacer(sidePadding)
+        hbox.Add(self.cancelButton, 0)
+        hbox.AddSpacer(sidePadding)
+        vbox.Add(hbox, 0, wx.ALIGN_RIGHT)
+
+    def onCreateClicked(self, event):
+        """
+        text
+
+        :param event:
+        :return:
+        """
+
+        print('onCreateClicked')
+
+    def onCancelClicked(self, event):
+        """
+        text
+
+        :param event:
+        :return:
+        """
+
+        print('onCancelClicked')
+
+        # Show the new panel
+        panelList = {
+            'main_menu_panel': {
+                'className': 'MainMenuPanel',
+                'size': 1
+            }
+        }
+        self.panelManager.showPanels(panelList)
