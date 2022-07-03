@@ -25,15 +25,14 @@ class MainMenuPanel(wx.Panel):
         :param stringsData:
         """
 
-        self.stringsData = stringsData
-
         # Create panel
         wx.Panel.__init__(self, parent)
         vbox = wx.BoxSizer(wx.VERTICAL)
+        self.SetSizer(vbox)
         vbox.AddSpacer(50)
 
         # Add the logo
-        logo = wx.Image('resources/title_image.png', wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+        logo = wx.Image('resources/logo.png', wx.BITMAP_TYPE_PNG).ConvertToBitmap()
         self.logoImage = wx.StaticBitmap(self, -1, logo)
         vbox.Add(self.logoImage, 0, wx.ALIGN_CENTER)
         vbox.AddSpacer(80)
@@ -55,7 +54,3 @@ class MainMenuPanel(wx.Panel):
         self.settingsButton = wx.Button(self, -1, stringsData['settingsButton'])
         self.settingsButton.SetFont(buttonFont)
         vbox.Add(self.settingsButton, 0, wx.ALIGN_CENTER)
-        vbox.AddSpacer(20)
-
-        # Finish the panel
-        self.SetSizer(vbox)
