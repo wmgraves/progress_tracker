@@ -12,13 +12,13 @@ Here is what you need to be able to run this code:
 * [wxPython](https://wxpython.org/) (4.1.1)
 
 # Roadmap
-- [X] UI Frames
-  - [X] Main Menu Frame
-  - [X] Create Project Frame
-  - [X] Load Project Frame
-  - [X] Project Overview Frame
-  - [X] Create/Edit Task Frame
-- [X] Load/Save Project Data
+- [ ] UI Panels
+  - [ ] Panel Manager
+  - [ ] Main Menu
+  - [ ] Create Project
+  - [ ] Load Project
+  - [ ] Edit Project
+- [ ] Load/Save Project Data
 - [ ] Export Options
   - [ ] .csv File Export
   - [X] .md File Export
