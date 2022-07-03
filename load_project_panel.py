@@ -57,7 +57,7 @@ class LoadProjectPanel(wx.Panel):
         self.list = wx.ListCtrl(self, style=wx.LC_REPORT)
         self.list.InsertColumn(0, 'Project Title', width=150)
         self.list.InsertColumn(1, 'Last Modified On', width=110)
-        self.list.InsertColumn(2, 'Progress', width=100)
+        self.list.InsertColumn(2, 'Progress', width=60)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
