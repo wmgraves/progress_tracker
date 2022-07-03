@@ -55,8 +55,9 @@ class LoadProjectPanel(wx.Panel):
 
         # Add list
         self.list = wx.ListCtrl(self, style=wx.LC_REPORT)
-        self.list.InsertColumn(0, 'Project Title', width=200)
+        self.list.InsertColumn(0, 'Project Title', width=150)
         self.list.InsertColumn(1, 'Last Modified On', width=110)
+        self.list.InsertColumn(2, 'Progress', width=100)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
@@ -64,6 +65,12 @@ class LoadProjectPanel(wx.Panel):
         hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 1, wx.EXPAND)
         vbox.AddSpacer(vGap)
+
+        # Populate list
+        for i in range(10):
+            self.list.InsertItem(i, "Project Title " + str(i))
+            self.list.SetItem(i, 1, '0' + str(i) + '/0' + str(i) + '/202' + str(i))
+            self.list.SetItem(i, 2, str(i) + '.00%')
 
         # Add buttons
         self.loadButton = wx.Button(self, label=stringsData['loadButton'])
