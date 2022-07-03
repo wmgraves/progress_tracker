@@ -25,6 +25,8 @@ class MainMenuPanel(wx.Panel):
         :param stringsData:
         """
 
+        self.panelManager = parent
+
         # Create panel
         wx.Panel.__init__(self, parent)
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -43,6 +45,7 @@ class MainMenuPanel(wx.Panel):
         buttonFont.PointSize = 25
         buttonFont.Weight = wx.BOLD
         self.createButton.SetFont(buttonFont)
+        self.createButton.Bind(wx.EVT_BUTTON, self.onCreateClicked)
         vbox.Add(self.createButton, 0, wx.ALIGN_CENTER)
         vbox.AddSpacer(20)
 
@@ -54,3 +57,22 @@ class MainMenuPanel(wx.Panel):
         self.settingsButton = wx.Button(self, -1, stringsData['settingsButton'])
         self.settingsButton.SetFont(buttonFont)
         vbox.Add(self.settingsButton, 0, wx.ALIGN_CENTER)
+
+    def onCreateClicked(self, event):
+        """
+        text
+
+        :param event:
+        :return:
+        """
+
+        print('Create button clicked')
+
+        # Show the new panel
+        panelList = {
+            'create_project_panel': {
+                'className': 'CreateProjectPanel',
+                'size': 1
+            }
+        }
+        self.panelManager.showPanels(panelList)
