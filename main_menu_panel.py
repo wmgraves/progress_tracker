@@ -95,6 +95,10 @@ class MainMenuPanel(wx.Panel):
             'load_project_panel': {
                 'className': 'LoadProjectPanel',
                 'size': 1
+            },
+            'project_overview_panel': {
+                'className': 'ProjectOverviewPanel',
+                'size': 1
             }
         }
         self.panelManager.showPanels(panelList)
