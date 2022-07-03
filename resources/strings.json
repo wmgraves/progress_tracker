@@ -1,0 +1,18 @@
+{
+  "panel_manager": {
+    "title": "Progress Tracker",
+    "statusText": "This program is still in development.  Please visit https://github.com/wmgraves/progress_tracker for more information."
+  },
+  "main_menu_panel": {
+    "createButton": "Create New Project",
+    "loadButton": "Load Existing Project",
+    "settingsButton": "Settings"
+  },
+  "create_project_panel": {
+    "titleLabel": "Project Title:",
+    "descriptionLabel": "Project Description:",
+    "logoLabel": "Project Logo Relative Filepath:",
+    "createButton": "Create Project",
+    "cancelButton": "Cancel"
+  }
+}
