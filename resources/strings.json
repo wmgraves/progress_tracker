@@ -10,11 +10,9 @@
   },
   "create_project_panel": {
     "titleLabel": "Title:",
-    "titleDefaultValue": "Add the project title here",
     "descriptionLabel": "Description:",
-    "descriptionDefaultValue": "Add the project description here",
-    "logoLabel": "Logo Relative Filepath:",
-    "logoDefaultValue": "resources/logo.png",
+    "logoLabel": "Relative Logo Filepath:",
+    "requirementsLabel": "Requirements:",
     "createButton": "Create Project",
     "cancelButton": "Cancel"
   },

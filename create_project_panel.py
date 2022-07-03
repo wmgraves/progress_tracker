@@ -36,7 +36,6 @@ class CreateProjectPanel(wx.Panel):
         # Create panel
         wx.Panel.__init__(self, parent)
         vbox = wx.BoxSizer(wx.VERTICAL)
-        self.SetSizer(vbox)
         vbox.AddSpacer(topPadding)
 
         # Add prompt for project title
@@ -45,52 +44,43 @@ class CreateProjectPanel(wx.Panel):
         labelFont.PointSize = 15
         labelFont.Weight = wx.BOLD
         self.titleLabel.SetFont(labelFont)
+        vbox.Add(self.titleLabel)
 
-        self.titleText = wx.TextCtrl(self, value=stringsData['titleDefaultValue'])
+        self.titleText = wx.TextCtrl(self)
         textFont = self.titleText.GetFont()
         textFont.PointSize = 13
         self.titleText.SetFont(textFont)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(sidePadding)
-        hbox.Add(self.titleLabel, 0)
-        hbox.AddSpacer(hGap)
-        hbox.Add(self.titleText, 1)
-        hbox.AddSpacer(sidePadding)
-        vbox.Add(hbox, 0, wx.EXPAND)
+        vbox.Add(self.titleText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
         # Add prompt for project logo
         self.logoLabel = wx.StaticText(self, label=stringsData['logoLabel'])
         self.logoLabel.SetFont(labelFont)
+        vbox.Add(self.logoLabel)
 
-        self.logoText = wx.TextCtrl(self, value=stringsData['logoDefaultValue'])
+        self.logoText = wx.TextCtrl(self)
         self.logoText.SetFont(textFont)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(sidePadding)
-        hbox.Add(self.logoLabel, 0)
-        hbox.AddSpacer(hGap)
-        hbox.Add(self.logoText, 1)
-        hbox.AddSpacer(sidePadding)
-        vbox.Add(hbox, 0, wx.EXPAND)
+        vbox.Add(self.logoText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
         # Add prompt for project description
         self.descriptionLabel = wx.StaticText(self, label=stringsData['descriptionLabel'])
         self.descriptionLabel.SetFont(labelFont)
+        vbox.Add(self.descriptionLabel)
 
-        self.descriptionText = wx.TextCtrl(self, size=(-1, 150), style=wx.TE_MULTILINE,
-                                           value=stringsData['descriptionDefaultValue'])
+        self.descriptionText = wx.TextCtrl(self, size=(-1, 150), style=wx.TE_MULTILINE)
         self.descriptionText.SetFont(textFont)
+        vbox.Add(self.descriptionText, 0, wx.EXPAND)
+        vbox.AddSpacer(vGap)
 
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(sidePadding)
-        hbox.Add(self.descriptionLabel, 0)
-        hbox.AddSpacer(hGap)
-        hbox.Add(self.descriptionText, 1)
-        hbox.AddSpacer(sidePadding)
-        vbox.Add(hbox, 0, wx.EXPAND)
+        # Add prompt for project description
+        self.requirementsLabel = wx.StaticText(self, label=stringsData['requirementsLabel'])
+        self.requirementsLabel.SetFont(labelFont)
+        vbox.Add(self.requirementsLabel)
+
+        self.requirementsText = wx.TextCtrl(self)#, size=(-1, 150), style=wx.TE_MULTILINE)
+        self.requirementsText.SetFont(textFont)
+        vbox.Add(self.requirementsText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
         # Add buttons
@@ -103,12 +93,17 @@ class CreateProjectPanel(wx.Panel):
         self.cancelButton.Bind(wx.EVT_BUTTON, self.onCancelClicked)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(sidePadding)
         hbox.Add(self.createButton, 0)
-        hbox.AddSpacer(sidePadding)
+        hbox.AddSpacer(hGap)
         hbox.Add(self.cancelButton, 0)
-        hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0, wx.ALIGN_RIGHT)
+        vbox.AddSpacer(topPadding)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.AddSpacer(sidePadding)
+        hbox.Add(vbox, 1)
+        hbox.AddSpacer(sidePadding)
+        self.SetSizer(hbox)
 
     def onCreateClicked(self, event):
         """

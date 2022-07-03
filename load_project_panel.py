@@ -14,7 +14,7 @@ import wx
 # Initialize variables
 topPadding = 20
 sidePadding = 5
-vGap = 5
+vGap = 20
 hGap = 10
 
 
@@ -36,7 +36,6 @@ class LoadProjectPanel(wx.Panel):
         # Create panel
         wx.Panel.__init__(self, parent)
         vbox = wx.BoxSizer(wx.VERTICAL)
-        self.SetSizer(vbox)
         vbox.AddSpacer(topPadding)
 
         # Add list label
@@ -45,25 +44,14 @@ class LoadProjectPanel(wx.Panel):
         labelFont.PointSize = 15
         labelFont.Weight = wx.BOLD
         self.listLabel.SetFont(labelFont)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(sidePadding)
-        hbox.Add(self.listLabel)
-        hbox.AddSpacer(sidePadding)
-        vbox.Add(hbox, 0, wx.EXPAND)
-        vbox.AddSpacer(vGap)
+        vbox.Add(self.listLabel)
 
         # Add list
         self.list = wx.ListCtrl(self, style=wx.LC_REPORT)
         self.list.InsertColumn(0, 'Project Title', width=150)
         self.list.InsertColumn(1, 'Last Modified On', width=110)
         self.list.InsertColumn(2, 'Progress', width=60)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(sidePadding)
-        hbox.Add(self.list, 1, wx.EXPAND)
-        hbox.AddSpacer(sidePadding)
-        vbox.Add(hbox, 1, wx.EXPAND)
+        vbox.Add(self.list, 1, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
         # Populate list
@@ -82,13 +70,17 @@ class LoadProjectPanel(wx.Panel):
         self.cancelButton.Bind(wx.EVT_BUTTON, self.onCancelClicked)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(sidePadding)
         hbox.Add(self.loadButton, 0)
-        hbox.AddSpacer(sidePadding)
+        hbox.AddSpacer(hGap)
         hbox.Add(self.cancelButton, 0)
-        hbox.AddSpacer(sidePadding)
         vbox.Add(hbox, 0, wx.ALIGN_RIGHT)
         vbox.AddSpacer(topPadding)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.AddSpacer(sidePadding)
+        hbox.Add(vbox, 1, wx.EXPAND)
+        hbox.AddSpacer(sidePadding)
+        self.SetSizer(hbox)
 
     def onLoadClicked(self, event):
         """
