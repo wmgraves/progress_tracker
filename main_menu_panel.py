@@ -8,6 +8,7 @@
 # Import external modules
 import wx
 
+
 # Import custom modules
 # TODO: imports
 
@@ -51,11 +52,13 @@ class MainMenuPanel(wx.Panel):
 
         self.loadButton = wx.Button(self, -1, stringsData['loadButton'])
         self.loadButton.SetFont(buttonFont)
+        self.loadButton.Bind(wx.EVT_BUTTON, self.onLoadClicked)
         vbox.Add(self.loadButton, 0, wx.ALIGN_CENTER)
         vbox.AddSpacer(20)
 
         self.settingsButton = wx.Button(self, -1, stringsData['settingsButton'])
         self.settingsButton.SetFont(buttonFont)
+        self.settingsButton.Bind(wx.EVT_BUTTON, self.onSettingsClicked)
         vbox.Add(self.settingsButton, 0, wx.ALIGN_CENTER)
 
     def onCreateClicked(self, event):
@@ -66,7 +69,7 @@ class MainMenuPanel(wx.Panel):
         :return:
         """
 
-        print('Create button clicked')
+        print('onCreateClicked')
 
         # Show the new panel
         panelList = {
@@ -76,3 +79,32 @@ class MainMenuPanel(wx.Panel):
             }
         }
         self.panelManager.showPanels(panelList)
+
+    def onLoadClicked(self, event):
+        """
+        text
+
+        :param event:
+        :return:
+        """
+
+        print('onLoadClicked')
+
+        # Show the new panel
+        panelList = {
+            'load_project_panel': {
+                'className': 'LoadProjectPanel',
+                'size': 1
+            }
+        }
+        self.panelManager.showPanels(panelList)
+
+    def onSettingsClicked(self, event):
+        """
+        text
+
+        :param event:
+        :return:
+        """
+
+        print('onSettingsClicked')

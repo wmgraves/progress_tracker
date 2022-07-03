@@ -17,5 +17,10 @@
     "logoDefaultValue": "resources/logo.png",
     "createButton": "Create Project",
     "cancelButton": "Cancel"
+  },
+  "load_project_panel": {
+    "listLabel": "Existing Projects:",
+    "loadButton": "Load Project",
+    "cancelButton": "Cancel"
   }
 }
