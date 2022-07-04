@@ -10,9 +10,13 @@
   },
   "create_project_panel": {
     "titleLabel": "Title:",
+    "titleInstruction": "Enter the project's title below",
     "descriptionLabel": "Description:",
+    "descriptionInstruction": "Enter the project's description below",
     "logoLabel": "Relative Logo Filepath:",
+    "logoInstruction": "Enter the filepath of the project's logo relative to the root folder below",
     "requirementsLabel": "Requirements:",
+    "requirementsInstruction": "Enter the project's requirements below, separating each with a semicolon",
     "createButton": "Create Project",
     "cancelButton": "Cancel"
   },
@@ -31,5 +35,20 @@
     "pieOverdue": "Overdue",
     "pieAvailable": "Available",
     "pieNotReady": "Not Ready"
+  },
+  "project_details_panel": {
+    "titleLabel": "Title:",
+    "titleInstruction": "Enter the project's title below",
+    "descriptionLabel": "Description:",
+    "descriptionInstruction": "Enter the project's description below",
+    "logoLabel": "Relative Logo Filepath:",
+    "logoInstruction": "Enter the relative filepath of the project's logo below",
+    "requirementsLabel": "Requirements:",
+    "requirementsInstruction": "Enter the project's requirements below",
+    "resetButton": "Reset Changes",
+    "saveButton": "Save Changes"
+  },
+  "tasks_preview_panel": {
+
   }
 }

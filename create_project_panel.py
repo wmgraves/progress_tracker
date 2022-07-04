@@ -46,6 +46,12 @@ class CreateProjectPanel(wx.Panel):
         self.titleLabel.SetFont(labelFont)
         vbox.Add(self.titleLabel)
 
+        self.titleInstruction = wx.StaticText(self, label=stringsData['titleInstruction'])
+        instructionFont = self.titleInstruction.GetFont()
+        instructionFont.PointSize = 10
+        self.titleInstruction.SetFont(instructionFont)
+        vbox.Add(self.titleInstruction)
+
         self.titleText = wx.TextCtrl(self)
         textFont = self.titleText.GetFont()
         textFont.PointSize = 13
@@ -58,6 +64,10 @@ class CreateProjectPanel(wx.Panel):
         self.logoLabel.SetFont(labelFont)
         vbox.Add(self.logoLabel)
 
+        self.logoInstruction = wx.StaticText(self, label=stringsData['logoInstruction'])
+        self.logoInstruction.SetFont(instructionFont)
+        vbox.Add(self.logoInstruction)
+
         self.logoText = wx.TextCtrl(self)
         self.logoText.SetFont(textFont)
         vbox.Add(self.logoText, 0, wx.EXPAND)
@@ -68,17 +78,25 @@ class CreateProjectPanel(wx.Panel):
         self.descriptionLabel.SetFont(labelFont)
         vbox.Add(self.descriptionLabel)
 
+        self.descriptionInstruction = wx.StaticText(self, label=stringsData['descriptionInstruction'])
+        self.descriptionInstruction.SetFont(instructionFont)
+        vbox.Add(self.descriptionInstruction)
+
         self.descriptionText = wx.TextCtrl(self, size=(-1, 150), style=wx.TE_MULTILINE)
         self.descriptionText.SetFont(textFont)
         vbox.Add(self.descriptionText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
-        # Add prompt for project description
+        # Add prompt for project requirements
         self.requirementsLabel = wx.StaticText(self, label=stringsData['requirementsLabel'])
         self.requirementsLabel.SetFont(labelFont)
         vbox.Add(self.requirementsLabel)
 
-        self.requirementsText = wx.TextCtrl(self)#, size=(-1, 150), style=wx.TE_MULTILINE)
+        self.requirementsInstruction = wx.StaticText(self, label=stringsData['requirementsInstruction'])
+        self.requirementsInstruction.SetFont(instructionFont)
+        vbox.Add(self.requirementsInstruction)
+
+        self.requirementsText = wx.TextCtrl(self)
         self.requirementsText.SetFont(textFont)
         vbox.Add(self.requirementsText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
@@ -114,7 +132,18 @@ class CreateProjectPanel(wx.Panel):
         :return:
         """
 
-        print('onCreateClicked')
+        # Show the new panel
+        panelList = {
+            'project_details_panel': {
+                'className': 'ProjectDetailsPanel',
+                'size': 1
+            },
+            'tasks_preview_panel': {
+                'className': 'TasksPreviewPanel',
+                'size': 2
+            }
+        }
+        self.panelManager.showPanels(panelList)
 
     def onCancelClicked(self, event):
         """
@@ -123,8 +152,6 @@ class CreateProjectPanel(wx.Panel):
         :param event:
         :return:
         """
-
-        print('onCancelClicked')
 
         # Show the new panel
         panelList = {
