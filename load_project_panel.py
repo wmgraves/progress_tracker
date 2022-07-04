@@ -76,6 +76,7 @@ class LoadProjectPanel(wx.Panel):
         vbox.Add(hbox, 0, wx.ALIGN_RIGHT)
         vbox.AddSpacer(topPadding)
 
+        # Add side padding
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(sidePadding)
         hbox.Add(vbox, 1, wx.EXPAND)

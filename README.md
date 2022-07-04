@@ -9,6 +9,7 @@ After mostly programming using Java and MATLAB for years, I am working to famili
 
 # Requirements
 Here is what you need to be able to run this code:
+* [matplotlib](https://matplotlib.org/) (2.2)
 * [wxPython](https://wxpython.org/) (4.1.1)
 
 # Roadmap
