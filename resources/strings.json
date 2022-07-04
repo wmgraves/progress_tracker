@@ -21,10 +21,15 @@
     "loadButton": "Load Project",
     "cancelButton": "Cancel"
   },
-  "project_overview_panel": {
+  "project_preview_panel": {
     "titleLabel": "Title:",
     "descriptionLabel": "Description:",
     "logoLabel": "Logo Relative Filepath:",
-    "requirementsLabel": "Requirements:"
+    "requirementsLabel": "Requirements:",
+    "pieCompleted": "Completed",
+    "pieInProgress": "In Progress",
+    "pieOverdue": "Overdue",
+    "pieAvailable": "Available",
+    "pieNotReady": "Not Ready"
   }
 }
