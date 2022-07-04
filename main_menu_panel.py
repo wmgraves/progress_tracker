@@ -69,8 +69,6 @@ class MainMenuPanel(wx.Panel):
         :return:
         """
 
-        print('onCreateClicked')
-
         # Show the new panel
         panelList = {
             'create_project_panel': {
@@ -87,8 +85,6 @@ class MainMenuPanel(wx.Panel):
         :param event:
         :return:
         """
-
-        print('onLoadClicked')
 
         # Show the new panel
         panelList = {
@@ -112,3 +108,4 @@ class MainMenuPanel(wx.Panel):
         """
 
         print('onSettingsClicked')
+        #TODO implement this

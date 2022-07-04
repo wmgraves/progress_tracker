@@ -92,6 +92,7 @@ class LoadProjectPanel(wx.Panel):
         """
 
         print('onLoadClicked')
+        #TODO implement this
 
     def onCancelClicked(self, event):
         """
@@ -100,8 +101,6 @@ class LoadProjectPanel(wx.Panel):
         :param event:
         :return:
         """
-
-        print('onCancelClicked')
 
         # Show the new panel
         panelList = {

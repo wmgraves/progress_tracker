@@ -43,6 +43,10 @@ class PanelManager(wx.Frame):
             'project_preview_panel': {
                 'className': 'ProjectPreviewPanel',
                 'size': 1
+            },
+            'tasks_preview_panel': {
+                'className': 'TasksPreviewPanel',
+                'size': 1
             }
         }
         self.showPanels(panelList)
