@@ -26,6 +26,8 @@ class PanelManager(wx.Frame):
         :param parent:
         """
 
+        self.projectData = None
+
         # Load strings resource file
         with open('resources/strings.json', 'r') as stringsFile:
             self.stringsData = json.load(stringsFile)
@@ -35,6 +37,15 @@ class PanelManager(wx.Frame):
         wx.Frame.__init__(self, None, title=self.stringsData['panel_manager']['title'])
         self.CreateStatusBar()
         self.SetStatusText(self.stringsData['panel_manager']['statusText'])
+
+        # Preload panels that take a while to load
+        panelList = {
+            'project_preview_panel': {
+                'className': 'ProjectPreviewPanel',
+                'size': 1
+            }
+        }
+        self.showPanels(panelList)
 
         # Display the main menu
         panelList = {
