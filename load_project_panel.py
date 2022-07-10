@@ -6,6 +6,9 @@
 # TODO: add description of this file
 
 # Import external modules
+import datetime
+import glob
+import os
 import wx
 
 # Import custom modules
@@ -48,17 +51,22 @@ class LoadProjectPanel(wx.Panel):
 
         # Add list
         self.list = wx.ListCtrl(self, style=wx.LC_REPORT)
-        self.list.InsertColumn(0, 'Project Title', width=150)
-        self.list.InsertColumn(1, 'Last Modified On', width=110)
+        self.list.InsertColumn(0, 'Data File Name', width=135)
+        self.list.InsertColumn(1, 'Last Modified On', width=125)
         self.list.InsertColumn(2, 'Progress', width=60)
         vbox.Add(self.list, 1, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
         # Populate list
-        for i in range(10):
-            self.list.InsertItem(i, "Project Title " + str(i))
-            self.list.SetItem(i, 1, '0' + str(i) + '/0' + str(i) + '/202' + str(i))
-            self.list.SetItem(i, 2, str(i) + '.00%')
+        files = list(filter(os.path.isfile, glob.glob("data/*.json")))
+        files.sort(key=lambda x: os.path.getmtime(x)) # sort by last modified time
+
+        for i in range(len(files)):
+            fileNum = len(files) - i - 1
+            self.list.InsertItem(i, files[fileNum][5:-5])
+            self.list.SetItem(i, 1, datetime.datetime.fromtimestamp(int(os.path.getmtime(files[fileNum]))).strftime(
+                '%m/%d/%Y %H:%M %p'))
+            self.list.SetItem(i, 2, '???')
 
         # Add buttons
         self.loadButton = wx.Button(self, label=stringsData['loadButton'])

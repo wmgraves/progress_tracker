@@ -56,6 +56,7 @@ class ProjectDetailsPanel(wx.Panel):
         textFont = self.titleText.GetFont()
         textFont.PointSize = 13
         self.titleText.SetFont(textFont)
+        self.titleText.SetValue(self.panelManager.projectData.title)
         vbox.Add(self.titleText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
@@ -70,6 +71,7 @@ class ProjectDetailsPanel(wx.Panel):
 
         self.logoText = wx.TextCtrl(self)
         self.logoText.SetFont(textFont)
+        self.logoText.SetValue(self.panelManager.projectData.logoFilePath)
         vbox.Add(self.logoText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
@@ -84,6 +86,7 @@ class ProjectDetailsPanel(wx.Panel):
 
         self.descriptionText = wx.TextCtrl(self, size=(-1, 150), style=wx.TE_MULTILINE)
         self.descriptionText.SetFont(textFont)
+        self.descriptionText.SetValue(self.panelManager.projectData.description)
         vbox.Add(self.descriptionText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
@@ -98,6 +101,7 @@ class ProjectDetailsPanel(wx.Panel):
 
         self.requirementsText = wx.TextCtrl(self)
         self.requirementsText.SetFont(textFont)
+        self.requirementsText.SetValue(self.panelManager.projectData.requirements)
         vbox.Add(self.requirementsText, 0, wx.EXPAND)
         vbox.AddSpacer(vGap)
 

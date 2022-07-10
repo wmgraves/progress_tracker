@@ -6,10 +6,13 @@
 # TODO: add description of this file
 
 # Import external modules
+import json
+import os.path
+import re
 import wx
 
 # Import custom modules
-# TODO: imports
+import project
 
 # Initialize variables
 topPadding = 20
@@ -131,6 +134,55 @@ class CreateProjectPanel(wx.Panel):
         :param event:
         :return:
         """
+
+        # Validate inputs
+        if not self.titleText.GetValue():
+            errorMessage = wx.MessageDialog(None, "ERROR: Invalid Input\n\nTitle must not be blank.",
+                                            style=wx.OK | wx.ICON_ERROR)
+            errorMessage.ShowModal()
+            errorMessage.Destroy()
+            return
+
+        fileName = re.sub(r'\W+', '', self.titleText.GetValue())
+        if len(fileName) < 1:
+            errorMessage = wx.MessageDialog(None, "ERROR: Invalid Input\n\nTitle must contain at least one "
+                                                  "alpha-numeric character.  Alpha-numeric characters are used to determine "
+                                                  "the name of the project's data file.",
+                                            style=wx.OK | wx.ICON_ERROR)
+            errorMessage.ShowModal()
+            errorMessage.Destroy()
+            return
+
+        if len(fileName) > 20:
+            fileName = fileName[:20]
+
+        if os.path.isfile('data/' + fileName + '.json'):
+            errorMessage = wx.MessageDialog(None, "ERROR: Invalid Input\n\nTitle is too similar to another project's "
+                                                  "title, which resulted in a duplicate project data file name.",
+                                            style=wx.OK | wx.ICON_ERROR)
+            errorMessage.ShowModal()
+            errorMessage.Destroy()
+            return
+
+        # Create project data file
+        data = {
+            "general": {
+                "title": self.titleText.GetValue(),
+                "description": self.descriptionText.GetValue(),
+                "logoFilePath": self.logoText.GetValue(),
+                "requirements": self.requirementsText.GetValue()
+            },
+            "tasks": {
+
+            }
+        }
+
+        dataFile = open('data/' + fileName + '.json', 'w')
+        json.dump(data, dataFile, indent=4)
+        dataFile.close()
+
+        # Prepare project
+        self.panelManager.projectData = project.Project('data/' + fileName + '.json')
 
         # Show the new panel
         panelList = {
