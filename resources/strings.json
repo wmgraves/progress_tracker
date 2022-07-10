@@ -46,9 +46,22 @@
     "requirementsLabel": "Requirements:",
     "requirementsInstruction": "Enter the project's requirements below",
     "resetButton": "Reset Changes",
-    "saveButton": "Save Changes"
+    "saveButton": "Save Changes",
+    "exportButton": "Export Data",
+    "closeButton": "Return to Menu"
   },
   "tasks_preview_panel": {
-
+    "barLabel": "Project Progress:",
+    "barCompleted": "Completed",
+    "colorCompleted": "52224",
+    "barInProgress": "In Progress",
+    "colorInProgress": "52428",
+    "barOverdue": "Overdue",
+    "colorOverdue": "204",
+    "barAvailable": "Available",
+    "colorAvailable": "13421568",
+    "barNotReady": "Not Ready",
+    "colorNotReady": "10526880",
+    "listLabel": "Task List:"
   }
 }

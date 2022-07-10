@@ -111,10 +111,25 @@ class ProjectDetailsPanel(wx.Panel):
         self.saveButton.Bind(wx.EVT_BUTTON, self.onSaveClicked)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(self.resetButton, 0)
+        hbox.Add(self.resetButton, 1)
         hbox.AddSpacer(hGap)
-        hbox.Add(self.saveButton, 0)
-        vbox.Add(hbox, 0, wx.ALIGN_RIGHT)
+        hbox.Add(self.saveButton, 1)
+        vbox.Add(hbox, 0, wx.EXPAND)
+        vbox.AddSpacer(topPadding)
+
+        self.exportButton = wx.Button(self, label=stringsData['exportButton'])
+        self.exportButton.SetFont(labelFont)
+        self.exportButton.Bind(wx.EVT_BUTTON, self.onExportClicked)
+
+        self.closeButton = wx.Button(self, label=stringsData['closeButton'])
+        self.closeButton.SetFont(labelFont)
+        self.closeButton.Bind(wx.EVT_BUTTON, self.onCloseClicked)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.Add(self.exportButton, 1)
+        hbox.AddSpacer(hGap)
+        hbox.Add(self.closeButton, 1)
+        vbox.Add(hbox, 0, wx.EXPAND)
         vbox.AddSpacer(topPadding)
 
         # Add side padding
@@ -145,3 +160,31 @@ class ProjectDetailsPanel(wx.Panel):
 
         print("onSaveClicked")
         #TODO implement this
+
+    def onExportClicked(self, event):
+        """
+        text
+
+        :param event:
+        :return:
+        """
+
+        print("onExportClicked")
+        #TODO implement this
+
+    def onCloseClicked(self, event):
+        """
+        text
+
+        :param event:
+        :return:
+        """
+
+        # Show the new panel
+        panelList = {
+            'main_menu_panel': {
+                'className': 'MainMenuPanel',
+                'size': 1
+            }
+        }
+        self.panelManager.showPanels(panelList)
