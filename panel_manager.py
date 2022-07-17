@@ -38,19 +38,6 @@ class PanelManager(wx.Frame):
         self.CreateStatusBar()
         self.SetStatusText(self.stringsData['panel_manager']['statusText'])
 
-        # Preload panels that take a while to load
-        panelList = {
-            'project_preview_panel': {
-                'className': 'ProjectPreviewPanel',
-                'size': 1
-            },
-            'tasks_preview_panel': {
-                'className': 'TasksPreviewPanel',
-                'size': 1
-            }
-        }
-        self.showPanels(panelList)
-
         # Display the main menu
         panelList = {
             'main_menu_panel': {

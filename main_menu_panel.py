@@ -6,6 +6,8 @@
 # TODO: add description of this file
 
 # Import external modules
+import glob
+import os
 import wx
 
 
@@ -61,6 +63,11 @@ class MainMenuPanel(wx.Panel):
         self.settingsButton.Bind(wx.EVT_BUTTON, self.onSettingsClicked)
         vbox.Add(self.settingsButton, 0, wx.ALIGN_CENTER)
 
+        # Disable load button if no files are available to load
+        files = list(filter(os.path.isfile, glob.glob("data/*.json")))
+        if len(files) == 0:
+            self.loadButton.Disable()
+
     def onCreateClicked(self, event):
         """
         text
@@ -91,10 +98,6 @@ class MainMenuPanel(wx.Panel):
             'load_project_panel': {
                 'className': 'LoadProjectPanel',
                 'size': 1
-            },
-            'project_preview_panel': {
-                'className': 'ProjectPreviewPanel',
-                'size': 4
             }
         }
         self.panelManager.showPanels(panelList)

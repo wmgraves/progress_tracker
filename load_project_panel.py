@@ -12,7 +12,7 @@ import os
 import wx
 
 # Import custom modules
-# TODO: imports
+from project import Project
 
 # Initialize variables
 topPadding = 20
@@ -51,22 +51,59 @@ class LoadProjectPanel(wx.Panel):
 
         # Add list
         self.list = wx.ListCtrl(self, style=wx.LC_REPORT)
-        self.list.InsertColumn(0, 'Data File Name', width=135)
+        self.list.InsertColumn(0, 'Project Title', width=300)
         self.list.InsertColumn(1, 'Last Modified On', width=125)
         self.list.InsertColumn(2, 'Progress', width=60)
+        self.list.InsertColumn(3, '# Tasks', width=50)
+        self.list.InsertColumn(4, '# Completed', width=85)
+        self.list.InsertColumn(5, '# In Progress', width=85)
+        self.list.InsertColumn(6, '# Overdue', width=70)
+        self.list.InsertColumn(7, '# Available', width=75)
+        self.list.InsertColumn(8, '# Not Ready', width=80)
         vbox.Add(self.list, 1, wx.EXPAND)
         vbox.AddSpacer(vGap)
 
         # Populate list
-        files = list(filter(os.path.isfile, glob.glob("data/*.json")))
-        files.sort(key=lambda x: os.path.getmtime(x)) # sort by last modified time
+        self.files = list(filter(os.path.isfile, glob.glob("data/*.json")))
+        self.files.sort(key=lambda x: os.path.getmtime(x)) # sort by last modified time
 
-        for i in range(len(files)):
-            fileNum = len(files) - i - 1
-            self.list.InsertItem(i, files[fileNum][5:-5])
-            self.list.SetItem(i, 1, datetime.datetime.fromtimestamp(int(os.path.getmtime(files[fileNum]))).strftime(
-                '%m/%d/%Y %H:%M %p'))
-            self.list.SetItem(i, 2, '???')
+        for i in range(len(self.files)):
+            # Get data
+            fileNum = len(self.files) - i - 1
+            file = open(self.files[fileNum], 'r')
+
+            for junk in range(2):
+                file.readline()
+            title = file.readline()[18:-3]
+
+            for junk in range(5):
+                file.readline()
+            numTasks = file.readline()[17:-2]
+            numCompleted = file.readline()[26:-2]
+            numInProgress = file.readline()[27:-2]
+            numOverdue = file.readline()[24:-2]
+            numAvailable = file.readline()[26:-2]
+            numNotReady = file.readline()[25:-2]
+
+            file.close()
+
+            progress = "0.0%"
+            if numTasks != '0':
+                progress = str(round(100.0 * int(numCompleted) / int(numTasks), 1)) + '%'
+
+            # Add data to list
+            self.list.InsertItem(i, title)
+            self.list.SetItem(i, 1, datetime.datetime.fromtimestamp(int(os.path.getmtime(self.files[fileNum])))
+                              .strftime('%m/%d/%Y %I:%M %p'))
+            self.list.SetItem(i, 2, progress)
+            self.list.SetItem(i, 3, numTasks)
+            self.list.SetItem(i, 4, numCompleted)
+            self.list.SetItem(i, 5, numInProgress)
+            self.list.SetItem(i, 6, numOverdue)
+            self.list.SetItem(i, 7, numAvailable)
+            self.list.SetItem(i, 8, numNotReady)
+
+        self.list.Select(0)
 
         # Add buttons
         self.loadButton = wx.Button(self, label=stringsData['loadButton'])
@@ -99,8 +136,21 @@ class LoadProjectPanel(wx.Panel):
         :return:
         """
 
-        print('onLoadClicked')
-        #TODO implement this
+        fileNum = len(self.files) - self.list.GetFirstSelected() - 1
+        self.panelManager.projectData = Project(self.files[fileNum])
+
+        # Display project data
+        panelList = {
+            'project_details_panel': {
+                'className': 'ProjectDetailsPanel',
+                'size': 1
+            },
+            'tasks_preview_panel': {
+                'className': 'TasksPreviewPanel',
+                'size': 2
+            }
+        }
+        self.panelManager.showPanels(panelList)
 
     def onCancelClicked(self, event):
         """

@@ -36,6 +36,9 @@ class Project():
         self.logoFilePath = data['general']['logoFilePath']
         self.requirements = data['general']['requirements']
 
+        self.tasks = []
+        #TODO figure out how to fill this list
+
     def saveData(self):
         """
         text
@@ -51,8 +54,15 @@ class Project():
                 "logoFilePath": self.logoFilePath,
                 "requirements": self.requirements
             },
+            "stats": {
+                "count": 0,
+                "countCompleted": 0,
+                "countInProgress": 0,
+                "countOverdue": 0,
+                "countAvailable": 0,
+                "countNotReady": 0
+            },
             "tasks": {
-
             }
         }
 

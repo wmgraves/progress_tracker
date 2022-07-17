@@ -140,7 +140,6 @@ class CreateProjectPanel(wx.Panel):
             errorMessage = wx.MessageDialog(None, "ERROR: Invalid Input\n\nTitle must not be blank.",
                                             style=wx.OK | wx.ICON_ERROR)
             errorMessage.ShowModal()
-            errorMessage.Destroy()
             return
 
         fileName = re.sub(r'\W+', '', self.titleText.GetValue())
@@ -150,7 +149,6 @@ class CreateProjectPanel(wx.Panel):
                                                   "the name of the project's data file.",
                                             style=wx.OK | wx.ICON_ERROR)
             errorMessage.ShowModal()
-            errorMessage.Destroy()
             return
 
         if len(fileName) > 20:
@@ -172,8 +170,15 @@ class CreateProjectPanel(wx.Panel):
                 "logoFilePath": self.logoText.GetValue(),
                 "requirements": self.requirementsText.GetValue()
             },
+            "stats": {
+                "count": 0,
+                "countCompleted": 0,
+                "countInProgress": 0,
+                "countOverdue": 0,
+                "countAvailable": 0,
+                "countNotReady": 0
+            },
             "tasks": {
-
             }
         }
 
@@ -184,7 +189,7 @@ class CreateProjectPanel(wx.Panel):
         # Prepare project
         self.panelManager.projectData = project.Project('data/' + fileName + '.json')
 
-        # Show the new panel
+        # Display project data
         panelList = {
             'project_details_panel': {
                 'className': 'ProjectDetailsPanel',

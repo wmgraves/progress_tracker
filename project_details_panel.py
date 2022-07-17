@@ -162,8 +162,22 @@ class ProjectDetailsPanel(wx.Panel):
         :return:
         """
 
-        print("onSaveClicked")
-        #TODO implement this
+        # Validate new data
+        if not self.titleText.GetValue():
+            errorMessage = wx.MessageDialog(None, "ERROR: Invalid Input\n\nTitle must not be blank.",
+                                            style=wx.OK | wx.ICON_ERROR)
+            errorMessage.ShowModal()
+            return
+
+        # Save new data
+        project = self.panelManager.projectData
+        project.title = self.titleText.GetValue()
+        project.description = self.descriptionText.GetValue()
+        project.logoFilePath = self.logoText.GetValue()
+        project.requirements = self.requirementsText.GetValue()
+
+        project.saveData()
+        wx.MessageDialog(None, "Project data saved successfully", style=wx.OK | wx.ICON_INFORMATION).ShowModal()
 
     def onExportClicked(self, event):
         """
@@ -183,6 +197,16 @@ class ProjectDetailsPanel(wx.Panel):
         :param event:
         :return:
         """
+
+        # Confirm that user wants to close the project
+        warningMessage = wx.MessageDialog(None, "Are you sure that you want to close the current project and return "
+                                                "to the main menu? Any unsaved data will be lost.",
+                                          style=wx.YES_NO | wx.NO_DEFAULT)
+        if warningMessage.ShowModal() == wx.ID_NO:
+            return
+
+        # Remove project data
+        self.panelManager.projectData = None
 
         # Show the new panel
         panelList = {
