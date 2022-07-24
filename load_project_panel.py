@@ -76,19 +76,19 @@ class LoadProjectPanel(wx.Panel):
                 file.readline()
             title = file.readline()[18:-3]
 
-            for junk in range(5):
+            for junk in range(6):
                 file.readline()
             numTasks = file.readline()[17:-2]
             numCompleted = file.readline()[26:-2]
             numInProgress = file.readline()[27:-2]
             numOverdue = file.readline()[24:-2]
             numAvailable = file.readline()[26:-2]
-            numNotReady = file.readline()[25:-2]
+            numNotReady = file.readline()[25:-1]
 
             file.close()
 
             progress = "0.0%"
-            if numTasks != '0':
+            if numTasks != "0":
                 progress = str(round(100.0 * int(numCompleted) / int(numTasks), 1)) + '%'
 
             # Add data to list

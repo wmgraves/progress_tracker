@@ -9,7 +9,7 @@
 import json
 
 # Import custom modules
-# TODO: imports
+from task import Task
 
 class Project():
     """
@@ -35,9 +35,51 @@ class Project():
         self.description = data['general']['description']
         self.logoFilePath = data['general']['logoFilePath']
         self.requirements = data['general']['requirements']
+        self.nextTaskID = data['general']['nextTaskID']
 
         self.tasks = []
-        #TODO figure out how to fill this list
+        for taskData in data['tasks'].values():
+            self.tasks.append(Task(taskData))
+
+        # Calculate progress counts
+        self.count = 0
+        self.countCompleted = 0
+        self.countInProgress = 0
+        self.countOverdue = 0
+        self.countAvailable = 0
+        self.countNotReady = 0
+        self.updateTaskCounts()
+
+    def updateTaskCounts(self):
+        """
+        text
+
+        :return:
+        """
+
+        # Reset counts
+        self.count = 0
+        self.countCompleted = 0
+        self.countInProgress = 0
+        self.countOverdue = 0
+        self.countAvailable = 0
+        self.countNotReady = 0
+
+        # Update counts
+        for taskData in self.tasks:
+            self.count += 1
+
+            status = taskData.getStatus()
+            if status == "Completed":
+                self.countCompleted += 1
+            elif status == "In Progress":
+                self.countInProgress += 1
+            elif status == "Overdue":
+                self.countOverdue += 1
+            elif status == "Available":
+                self.countAvailable += 1
+            else:
+                self.countNotReady += 1
 
     def saveData(self):
         """
@@ -52,19 +94,23 @@ class Project():
                 "title": self.title,
                 "description": self.description,
                 "logoFilePath": self.logoFilePath,
-                "requirements": self.requirements
+                "requirements": self.requirements,
+                "nextTaskID": self.nextTaskID
             },
-            "stats": {
-                "count": 0,
-                "countCompleted": 0,
-                "countInProgress": 0,
-                "countOverdue": 0,
-                "countAvailable": 0,
-                "countNotReady": 0
-            },
-            "tasks": {
-            }
+            "stats": {},
+            "tasks": {}
         }
+
+        data['stats']['count'] = self.count
+        data['stats']['countCompleted'] = self.countCompleted
+        data['stats']['countInProgress'] = self.countInProgress
+        data['stats']['countOverdue'] = self.countOverdue
+        data['stats']['countAvailable'] = self.countAvailable
+        data['stats']['countNotReady'] = self.countNotReady
+
+        for task in self.tasks:
+            taskData = task.getPackagedData()
+            data['tasks'][str(taskData['id'])] = taskData
 
         # Save data
         dataFile = open(self.projectFilepath, 'w')

@@ -168,17 +168,38 @@ class CreateProjectPanel(wx.Panel):
                 "title": self.titleText.GetValue(),
                 "description": self.descriptionText.GetValue(),
                 "logoFilePath": self.logoText.GetValue(),
-                "requirements": self.requirementsText.GetValue()
+                "requirements": self.requirementsText.GetValue(),
+                "nextTaskID": 2
             },
             "stats": {
-                "count": 0,
+                "count": 2,
                 "countCompleted": 0,
-                "countInProgress": 0,
+                "countInProgress": 1,
                 "countOverdue": 0,
-                "countAvailable": 0,
+                "countAvailable": 1,
                 "countNotReady": 0
             },
             "tasks": {
+                "0": {
+                    "id": 0,
+                    "title": "This is an example task. Open me to learn more!",
+                    "description": "Enter a description for a task in this text box.",
+                    "notes": "Enter notes for a task in this text box.",
+                    "completed": False,
+                    "inProgress": True,
+                    "dueDate": None,
+                    "prereqIDs": [1]
+                },
+                "1": {
+                    "id": 1,
+                    "title": "Create, rearrange, categorize, or delete tasks using the buttons below.",
+                    "description": "Enter a description for a task in this text box.",
+                    "notes": "Enter notes for a task in this text box.",
+                    "completed": False,
+                    "inProgress": False,
+                    "dueDate": None,
+                    "prereqIDs": []
+                }
             }
         }
 

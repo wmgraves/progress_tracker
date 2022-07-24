@@ -151,8 +151,12 @@ class ProjectDetailsPanel(wx.Panel):
         :return:
         """
 
-        print("onResetClicked")
-        #TODO implement this
+        # Reset project data
+        project = self.panelManager.projectData
+        self.titleText.SetValue(project.title)
+        self.descriptionText.SetValue(project.description)
+        self.logoText.SetValue(project.logoFilePath)
+        self.requirementsText.SetValue(project.requirements)
 
     def onSaveClicked(self, event):
         """
